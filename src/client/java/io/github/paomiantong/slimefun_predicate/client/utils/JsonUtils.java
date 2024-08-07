@@ -1,7 +1,6 @@
 package io.github.paomiantong.slimefun_predicate.client.utils;
 
 import com.google.gson.Gson;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -97,7 +96,7 @@ public class JsonUtils {
             itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         }
         if (json.has("name")) {
-            itemStack.set(DataComponentTypes.ITEM_NAME, deserializeText(json.get("name")));
+            itemStack.set(DataComponentTypes.CUSTOM_NAME, deserializeText(json.get("name")));
         }
         if (itemStack.getItem()
                 .equals(Registries.ITEM.get(Identifier.of("player_head")))

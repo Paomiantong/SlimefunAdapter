@@ -6,6 +6,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,6 +63,10 @@ public class SlimefunUtils {
         return "_UI_NEXT_ACTIVE".equals(getSlimefunID(next));
     }
 
+    public static boolean isRoot(List<Slot> slots) {
+        return "_UI_MENU".equals(getSlimefunID(slots.get(1).getStack()));
+    }
+
     public static boolean isMenu(@NotNull ItemStack stack) {
         @Nullable var nbtComp = stack.get(DataComponentTypes.CUSTOM_DATA);
         if (nbtComp == null) {
@@ -71,6 +76,10 @@ public class SlimefunUtils {
         return values.contains("slimefun:slimefun_guide_mode");
     }
 
+    public static boolean isLocked(@NotNull ItemStack stack) {
+        return getSlimefunID(stack).startsWith("_UI_NO_PERMISSION");
+    }
+
     public static SlimefunRecipe extractRecipe(List<Slot> slots) {
         SlimefunItemStack type = new SlimefunItemStack(slots.get(10).getStack().copy());
         ItemStack output = slots.get(16).getStack().copy();
@@ -78,8 +87,30 @@ public class SlimefunUtils {
         for (int i = 0; i < 9; i++) {
             int r = (i / 3) * 9;
             int c = i % 3 + 3;
-            inputs[i] = new SlimefunItemStack(slots.get(r + c).getStack().copy());
+            ItemStack stack = slots.get(r + c).getStack();
+            String unlockPath = isLockedIngredient(stack);
+            if (unlockPath != null)
+                inputs[i] = new SlimefunItemStack(stack.copy(), unlockPath);
+            else
+                inputs[i] = new SlimefunItemStack(stack.copy());
         }
         return new SlimefunRecipe(new SlimefunItemStack(output), inputs, type);
+    }
+
+    public static String isLockedIngredient(ItemStack stack) {
+        if (!stack.getItem().equals(Registries.ITEM.get(Identifier.of("minecraft:barrier")))) {
+            return null;
+        }
+        @Nullable final var lore = stack.get(DataComponentTypes.LORE);
+        @Nullable final var name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (lore == null || name == null) {
+            return null;
+        }
+        boolean locked = "已锁定".equals(lore.lines().get(0).getString());
+        String category = lore.lines().get(2).getString().split(" ")[1];
+        if (locked) {
+            return category + "/" + name.getString();
+        }
+        return null;
     }
 }

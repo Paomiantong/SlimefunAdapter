@@ -1,7 +1,6 @@
 package io.github.paomiantong.slimefun_predicate.client.utils;
 
 import com.mojang.brigadier.CommandDispatcher;
-import io.github.paomiantong.slimefun_predicate.client.menuloader.MenuMonitor;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.entity.player.PlayerEntity;

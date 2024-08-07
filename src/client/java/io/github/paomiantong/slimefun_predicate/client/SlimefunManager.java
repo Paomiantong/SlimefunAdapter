@@ -18,12 +18,15 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class ResourceLoader {
+public class SlimefunManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SlimefunPredicateClient.class);
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final @Getter Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
     private static final @Getter Map<String, List<SlimefunRecipe>> slimefunRecipes = new LinkedHashMap<>();
     private static final @Getter Map<String, SlimefunRecipeCategory> slimefunRecipeCategories = new LinkedHashMap<>();
+    private static final @Getter Map<String, List<SlimefunRecipe>> partialUnlockedRecipes = new LinkedHashMap<>();
+    private static final @Getter Set<String> vanillaItems = new HashSet<>();
+    private static final @Getter Set<String> completelyUnlockedCategory = new HashSet<>();
     private static final Path CONFIG_PATH = Paths.get("config/slimefun-predicate/");
 
     public static void writeStringToFile(String fileName, String content) {
@@ -46,7 +49,16 @@ public class ResourceLoader {
         slimefunRecipeCategories.clear();
     }
 
+    public static boolean hasSlimefunItem(String id) {
+        return slimefunItems.containsKey(id) || vanillaItems.contains(id);
+    }
+
     public static void addSlimefunItem(SlimefunItemStack item) {
+        String id = item.getId();
+        if (id.startsWith(":")) {
+            vanillaItems.add(id);
+            return;
+        }
         slimefunItems.put(item.getId(), item);
     }
 
@@ -65,18 +77,73 @@ public class ResourceLoader {
         slimefunRecipes.get(outputId).add(recipe);
     }
 
+    public static void addPartialUnlockedRecipe(String unLockPath, SlimefunRecipe recipe) {
+        if (!partialUnlockedRecipes.containsKey(unLockPath)) {
+            partialUnlockedRecipes.put(unLockPath, new ArrayList<>());
+        }
+        partialUnlockedRecipes.get(unLockPath).add(recipe);
+    }
+
+    public static void addCompletelyUnlockedCategory(String category) {
+        completelyUnlockedCategory.add(category);
+    }
+
+    public static void unlockItem(String unLockPath, SlimefunItemStack item) {
+        if (partialUnlockedRecipes.containsKey(unLockPath)) {
+            List<SlimefunRecipe> recipes = partialUnlockedRecipes.get(unLockPath);
+            recipes.forEach(recipe -> {
+                SlimefunItemStack[] inputs = recipe.inputs();
+                for (int i = 0; i < 9; i++) {
+                    SlimefunItemStack input = inputs[i];
+                    if (input.isLocked() && input.getUnlockPath().equals(unLockPath)) {
+                        recipe.setInput(i, item);
+                    }
+                }
+                LOGGER.info("Unlocked recipe: {}", recipe);
+            });
+            partialUnlockedRecipes.remove(unLockPath);
+        }
+    }
+
+    public static SlimefunItemStack getSlimefunItem(String id) {
+        SlimefunItemStack ret = slimefunItems.get(id);
+        if (ret != null) {
+            return ret;
+        }
+
+        if (id.startsWith("!")) {
+            String[] tmp = id.split("!");
+            return new SlimefunItemStack(new ItemStack(Registries.ITEM.get(Identifier.of(tmp[2]))), tmp[1]);
+        }
+
+        return new SlimefunItemStack(new ItemStack(Registries.ITEM.get(Identifier.of(id))));
+    }
+
+    public static boolean isCompletelyUnlocked(String category) {
+        return completelyUnlockedCategory.contains(category);
+    }
+
     public static void load() {
         clear();
         loadItems();
         loadRecipes();
+        loadCompletelyUnlockedCategory();
+    }
+
+    public static void finalizeData() {
+        var toDelete = slimefunRecipes.keySet().stream()
+                .filter(id -> !slimefunItems.containsKey(id) && (!id.startsWith("minecraft")))
+                .toList();
+        toDelete.forEach(slimefunRecipes::remove);
     }
 
     public static void save() {
         JsonObject itemJson = new JsonObject();
         slimefunItems.forEach((id, item) -> {
             itemJson.add(id, item.serialize());
-            System.out.println("Saved item: " + item);
+            LOGGER.debug("Saving item: {} {}", item, id);
         });
+        itemJson.add("vanilla", gson.toJsonTree(vanillaItems));
         writeStringToFile(CONFIG_PATH + "/slimefun_items.json", gson.toJson(itemJson));
 
         JsonObject recipeJson = new JsonObject();
@@ -86,14 +153,10 @@ public class ResourceLoader {
             recipeJson.add(id, recipes);
         });
         writeStringToFile(CONFIG_PATH + "/slimefun_recipes.json", gson.toJson(recipeJson));
-    }
 
-    public static SlimefunItemStack getSlimefunItem(String id) {
-        SlimefunItemStack ret = slimefunItems.get(id);
-        if (ret != null) {
-            return ret;
-        }
-        return new SlimefunItemStack(new ItemStack(Registries.ITEM.get(Identifier.of(id))));
+        JsonArray categories = new JsonArray();
+        completelyUnlockedCategory.forEach(categories::add);
+        writeStringToFile(CONFIG_PATH + "/completely_unlocked_category.json", gson.toJson(categories));
     }
 
     private static void loadItems() {
@@ -102,6 +165,11 @@ public class ResourceLoader {
             try {
                 final JsonObject itemJson = gson.fromJson(Files.newBufferedReader(ITEM_JSON_PATH), JsonObject.class);
                 itemJson.entrySet().forEach(entry -> {
+                    if (entry.getKey().equals("vanilla")) {
+                        JsonArray vanilla = entry.getValue().getAsJsonArray();
+                        vanilla.forEach(id -> vanillaItems.add(id.getAsString()));
+                        return;
+                    }
                     final SlimefunItemStack item = new SlimefunItemStack(JsonUtils.deserializeItem(entry.getValue().getAsJsonObject()));
                     slimefunItems.put(entry.getKey(), item);
                     //LOGGER.info("Loaded item: {} {}", item, entry.getKey());
@@ -131,5 +199,18 @@ public class ResourceLoader {
             }
         }
         LOGGER.info("Loaded {} slimefun recipes", slimefunRecipes.size());
+    }
+
+    public static void loadCompletelyUnlockedCategory() {
+        final Path CATEGORY_JSON_PATH = Path.of(CONFIG_PATH + "/completely_unlocked_category.json");
+        if (Files.exists(CATEGORY_JSON_PATH)) {
+            try {
+                final JsonArray categories = gson.fromJson(Files.newBufferedReader(CATEGORY_JSON_PATH), JsonArray.class);
+                categories.forEach(category -> completelyUnlockedCategory.add(category.getAsString()));
+            } catch (IOException e) {
+                LOGGER.warn("Error loading completely unlocked category: " + e.getMessage());
+            }
+        }
+        LOGGER.info("Loaded {} completely unlocked category", completelyUnlockedCategory.size());
     }
 }

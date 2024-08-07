@@ -2,7 +2,6 @@ package io.github.paomiantong.slimefun_predicate.client.emi;
 
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
-import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
 import io.github.paomiantong.slimefun_predicate.client.*;
@@ -22,10 +21,10 @@ public class EmiIntegrate implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
-        for (SlimefunItemStack slimefunItemStack : ResourceLoader.getSlimefunItems().values()) {
+        for (SlimefunItemStack slimefunItemStack : SlimefunManager.getSlimefunItems().values()) {
             registry.setDefaultComparison(EmiStack.of(slimefunItemStack.getStack()), SLIMEFUN_ID);
         }
-        for (SlimefunRecipeCategory slimefunRecipeCategory : ResourceLoader.getSlimefunRecipeCategories().values()) {
+        for (SlimefunRecipeCategory slimefunRecipeCategory : SlimefunManager.getSlimefunRecipeCategories().values()) {
             final SlimefunItemStack type = slimefunRecipeCategory.type();
             final String workstationId = String.valueOf(type.hashCode());
             final Identifier categoryIdentifier = Identifier.of("slimefun", workstationId.toLowerCase(Locale.ROOT));
@@ -38,7 +37,7 @@ public class EmiIntegrate implements EmiPlugin {
             }
         }
 
-        for (SlimefunItemStack slimefunItemStack : ResourceLoader.getSlimefunItems().values()) {
+        for (SlimefunItemStack slimefunItemStack : SlimefunManager.getSlimefunItems().values()) {
             registry.addEmiStack(EmiStack.of(slimefunItemStack.getStack()));
         }
 

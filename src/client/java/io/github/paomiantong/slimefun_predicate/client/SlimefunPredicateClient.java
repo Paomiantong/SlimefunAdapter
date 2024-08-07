@@ -1,6 +1,6 @@
 package io.github.paomiantong.slimefun_predicate.client;
 
-import io.github.paomiantong.slimefun_predicate.client.menuloader.LoadSlimefunMenu;
+import io.github.paomiantong.slimefun_predicate.client.menuloader.SyncSlimefunMenu;
 import io.github.paomiantong.slimefun_predicate.client.utils.ShowComponents;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -17,8 +17,8 @@ public class SlimefunPredicateClient implements ClientModInitializer {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        ResourceLoader.load();
-        LoadSlimefunMenu.registerCommands();
+        SlimefunManager.load();
+        SyncSlimefunMenu.registerCommands();
         ShowComponents.registerCommands();
         ModelPredicateProviderRegistry.register(Identifier.of("sf_predict", "sf_item"), new SFPredicateProvider());
     }
