@@ -1,27 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "slimefun_predictae",
+  "id": "slimefun_predicate",
   "version": "${version}",
-  "name": "slimefun_predictae",
-  "description": "Slimefun4 Predicate for Slimefun Resources Pack",
-  "authors": ["Exbuekct_"],
+  "name": "slimefun_predicate",
+  "description": "ClientSide Enhancement mod for Slimefun4",
+  "authors": [
+    "Exbuekct_"
+  ],
   "contact": {},
   "license": "All-Rights-Reserved",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.paomiantong.slimefun_predicate.client.SlimefunPredicateClient"
+      "io.github.paomiantong.slimefun_predicate.SlimefunPredicateClient"
     ],
-    "main": [
-      "io.github.paomiantong.slimefun_predicate.SlimefunPredicate"
+    "modmenu": [
+      "io.github.paomiantong.slimefun_predicate.config.ModMenuIntegration"
     ],
     "emi": [
-      "io.github.paomiantong.slimefun_predicate.client.emi.EmiIntegrate"
+      "io.github.paomiantong.slimefun_predicate.emi.EmiIntegrate"
     ]
   },
+  "mixins": [
+    "slimefunid.mixin.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "1.21"
+    "minecraft": "1.21",
+    "fabric-key-binding-api-v1": "*"
   }
 }
