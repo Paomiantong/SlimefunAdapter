@@ -1,15 +1,16 @@
 {
+  "category.slimefun_predicate.backpack": "粘液科技背包",
+  "config.slimefun_predicate.emi": "EMI设置",
+  "config.slimefun_predicate.emi.support_recipe_category": "支持emi快速合成的分类(粘液ID)",
+  "config.slimefun_predicate.sync": "同步设置",
+  "config.slimefun_predicate.sync.exclude": "排除的物品/分类(名称)",
+  "config.slimefun_predicate.sync.exclude_workstation": "排除的工作方块(粘液ID)",
+  "config.slimefun_predicate.sync.menu_title": "支持扫描的菜单标题",
+  "config.slimefun_predicate.sync.special": "特殊物品(粘液ID)",
+  "config.slimefun_predicate.sync.ticks_per_action": "扫频频率(tick/次)",
+  "config.slimefun_predicate.title": "粘液科科技增强",
   "key.slimefun_predicate.backpack": "打开背包",
   "key.slimefun_predicate.tooltip": "显示粘液科技物品ID",
-  "category.slimefun_predicate.backpack": "粘液科技背包",
-  "slimefun_predicate.tooltip": "Slimefun ID: ",
-  "config.slimefun_predicate.title": "粘液科科技增强",
-  "config.slimefun_predicate.sync": "同步设置",
-  "config.slimefun_predicate.emi": "EMI设置",
-  "config.slimefun_predicate.sync.ticks_per_action": "扫频频率(tick/次)",
-  "config.slimefun_predicate.sync.exclude": "排除的物品/分类(名称)",
-  "config.slimefun_predicate.sync.special": "特殊物品(粘液ID)",
-  "config.slimefun_predicate.emi.support_recipe_category": "支持emi快速合成的分类(粘液ID)",
-  "config.slimefun_predicate.sync.exclude_workstation": "排除的工作方块(粘液ID)",
-  "message.slimefun_predicate.slimefun_data_not_loaded": "粘液科技数据未加载, 请先同步数据，输入 /sync_menu help来获取更多信息。"
+  "message.slimefun_predicate.slimefun_data_not_loaded": "粘液科技数据未加载, 请先同步数据，输入 /sync_menu help来获取更多信息。",
+  "slimefun_predicate.tooltip": "Slimefun ID: "
 }

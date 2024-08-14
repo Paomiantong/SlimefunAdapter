@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,6 +70,13 @@ public final class Config {
 //            "ANCIENT_ALTAR",
     ));
 
+    @Configurable
+    @Setter
+    public static HashSet<String> MENU_TITLE = new HashSet<>(List.of(
+            "Slimefun 指南",
+            "炼金术自传"
+    ));
+
 //    @Configurable
 //    @Setter
 //    public static HashSet<String> SERIES_WORKSTATION = new HashSet<>(List.of(
@@ -121,8 +126,12 @@ public final class Config {
             }
             ConfigUtils.getConfigurableFields(cls).forEach(field -> {
                 try {
+                    var value = gson.fromJson(config.get(field.getName()), field.getType());
+                    if (value == null) {
+                        return;
+                    }
                     LOGGER.info("{}: {}", field.getName(), config.get(field.getName()));
-                    field.set(null, gson.fromJson(config.get(field.getName()), field.getType()));
+                    field.set(null, value);
                 } catch (IllegalAccessException e) {
                     LOGGER.error("Failed to load configuration: {}", e.getMessage());
                 }

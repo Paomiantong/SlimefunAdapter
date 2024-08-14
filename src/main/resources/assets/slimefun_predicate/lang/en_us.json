@@ -1,15 +1,16 @@
 {
+  "category.slimefun_predicate.backpack": "Slimefun Backpack",
+  "config.slimefun_predicate.emi": "EMI Settings",
+  "config.slimefun_predicate.emi.support_recipe_category": "Support recipe category for EMI(Slimefun ID)",
+  "config.slimefun_predicate.sync": "Sync Settings",
+  "config.slimefun_predicate.sync.exclude": "Exclude items",
+  "config.slimefun_predicate.sync.exclude_workstation": "Exclude workstation(Slimefun ID)",
+  "config.slimefun_predicate.sync.menu_title": "Menu title",
+  "config.slimefun_predicate.sync.special": "Special items(Slimefun ID)",
+  "config.slimefun_predicate.sync.ticks_per_action": "Ticks per action",
+  "config.slimefun_predicate.title": "Slimefun Predicate",
   "key.slimefun_predicate.backpack": "Open the backpack",
   "key.slimefun_predicate.tooltip": "Show Slimefun id",
-  "category.slimefun_predicate.backpack": "Slimefun Backpack",
-  "slimefun_predicate.tooltip": "Slimefun ID: ",
-  "config.slimefun_predicate.title": "Slimefun Predicate",
-  "config.slimefun_predicate.sync": "Sync Settings",
-  "config.slimefun_predicate.emi": "EMI Settings",
-  "config.slimefun_predicate.sync.ticks_per_action": "Ticks per action",
-  "config.slimefun_predicate.sync.exclude": "Exclude items",
-  "config.slimefun_predicate.sync.special": "Special items(Slimefun ID)",
-  "config.slimefun_predicate.emi.support_recipe_category": "Support recipe category for EMI(Slimefun ID)",
-  "config.slimefun_predicate.sync.exclude_workstation": "Exclude workstation(Slimefun ID)",
-  "message.slimefun_predicate.slimefun_data_not_loaded": "Slimefun data is not loaded, please sync menu first. type /sync_menu help for more information."
+  "message.slimefun_predicate.slimefun_data_not_loaded": "Slimefun data is not loaded, please sync menu first. type /sync_menu help for more information.",
+  "slimefun_predicate.tooltip": "Slimefun ID: "
 }

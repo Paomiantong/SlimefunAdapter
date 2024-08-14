@@ -157,6 +157,7 @@ public class SlimefunManager {
                 entry.setValue(new SlimefunRecipeCategory(finalType, category.recipes()));
             }
         });
+        initialized = true;
     }
 
     public static void save() {

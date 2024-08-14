@@ -1,7 +1,6 @@
 package io.github.paomiantong.slimefun_predicate.mixin;
 
 import net.minecraft.client.MinecraftClient;
-
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

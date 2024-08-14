@@ -7,8 +7,8 @@ import io.github.paomiantong.slimefun_predicate.menuloader.addons.WorkstationRec
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunRecipe;
-import io.github.paomiantong.slimefun_predicate.utils.SlimefunUtils;
 import io.github.paomiantong.slimefun_predicate.utils.InventoryUtils;
+import io.github.paomiantong.slimefun_predicate.utils.SlimefunUtils;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -103,13 +103,13 @@ public class MenuSynchronizer {
         if (client.currentScreen instanceof HandledScreen<?> handledScreen) {
             ScreenHandler handler = handledScreen.getScreenHandler();
             Text title = handledScreen.getTitle();
-            if (title.getString().contains("Slimefun 指南")) {
+            if (Config.MENU_TITLE.contains(title.getString())) {
                 long limited = handler.slots.size() - 36;
                 if (handler.slots.stream().limit(limited).allMatch(slot -> slot.getStack().isEmpty())) {
                     LOGGER.warn("菜单为空！");
                     return;
                 }
-//                LOGGER.info("CURRENT TICK SYNC ID: {}", handler.syncId);
+                LOGGER.info("CURRENT TICK SYNC ID: {}", handler.syncId);
 
                 Action currentAction = actionStack.peek();
                 Predicate<ScreenHandler> predicate = currentAction.getType().getAwaitPredicate();
@@ -140,6 +140,53 @@ public class MenuSynchronizer {
                 currentAction.getType().runAction(client, handler, currentAction.getIndex());
             }
         }
+    }
+
+    public static void scan(String name) {
+        actionStack.clear();
+        MenuPath.init();
+        lastSyncId = -1;
+        awaiting = false;
+        running = true;
+        final ActionType closeAction = new ActionType() {
+            @Override
+            public boolean requireAwait() {
+                return false;
+            }
+
+            @Override
+            public void runAction(MinecraftClient client, ScreenHandler handler, int slotId) {
+                stopSync();
+            }
+        };
+
+        final ActionType scanAction = new ActionType() {
+            @Override
+            public boolean requireAwait() {
+                return false;
+            }
+
+            @Override
+            public void runAction(MinecraftClient client, ScreenHandler handler, int slotId) {
+                if (!running) return;
+                for (Slot slot : getSlots(handler)) {
+                    ItemStack stack = slot.getStack();
+                    if (isExcluded(stack) ||
+                            (incrementalUpdate && SlimefunManager.isCompletelyUnlocked(stack.getName().getString()))) {
+                        continue;
+                    }
+                    if (name.equals(stack.getName().getString())) {
+                        actionStack.push(new Action(OPEN_CATEGORY, slot.id, stack, closeAction));
+                    }
+                }
+            }
+
+            @Override
+            public String toString() {
+                return "SCAN_SPEC:" + name;
+            }
+        };
+        actionStack.push(new Action(scanAction, -1, null));
     }
 
 

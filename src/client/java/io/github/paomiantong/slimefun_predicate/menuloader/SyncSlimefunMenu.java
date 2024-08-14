@@ -32,7 +32,8 @@ public class SyncSlimefunMenu {
                     MenuSynchronizer.stopSync();
                     context.getSource().sendFeedback(Text.literal("停止同步菜单"));
                     return 1;
-                })).then(literal("debug").executes(context -> {
+                }))
+                .then(literal("debug").executes(context -> {
                     FabricClientCommandSource source = context.getSource();
                     openMenu(source, true, false);
                     return 1;
@@ -50,6 +51,20 @@ public class SyncSlimefunMenu {
                     source.sendFeedback(Text.literal("stop: 停止同步菜单"));
                     return 1;
                 }))
+//                .then(literal("scan").then(
+//                                argument("name", StringArgumentType.string()).executes(context -> {
+//                                    FabricClientCommandSource source = context.getSource();
+//                                    String name = StringArgumentType.getString(context, "name");
+//                                    if (!monitorRegistered) {
+//                                        MenuSynchronizer.registerListener();
+//                                        monitorRegistered = true;
+//                                    }
+//                                    MenuSynchronizer.scan(name);
+//                                    source.sendFeedback(Text.literal("扫描物品成功"));
+//                                    return 1;
+//                                })
+//                        )
+//                )
         );
     }
 

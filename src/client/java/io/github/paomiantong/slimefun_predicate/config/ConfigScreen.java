@@ -1,13 +1,10 @@
 package io.github.paomiantong.slimefun_predicate.config;
 
-import io.github.paomiantong.slimefun_predicate.SlimefunPredicateClient;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +37,11 @@ public class ConfigScreen {
         sync.addEntry(entryBuilder.startStrList(Text.translatable("config.slimefun_predicate.sync.exclude_workstation"), Config.EXCLUDE_WORKSTATION.stream().toList())
                 .setSaveConsumer(toSet(Config::setEXCLUDE_WORKSTATION))
                 .setDefaultValue(Config.EXCLUDE_WORKSTATION.stream().toList())
+                .build());
+
+        sync.addEntry(entryBuilder.startStrList(Text.translatable("config.slimefun_predicate.sync.menu_title"), Config.MENU_TITLE.stream().toList())
+                .setSaveConsumer(toSet(Config::setMENU_TITLE))
+                .setDefaultValue(Config.MENU_TITLE.stream().toList())
                 .build());
 
         emi.addEntry(entryBuilder.startStrList(Text.translatable("config.slimefun_predicate.emi.support_recipe_category"), Config.SUPPORT_RECIPE_CATEGORY.stream().toList())
