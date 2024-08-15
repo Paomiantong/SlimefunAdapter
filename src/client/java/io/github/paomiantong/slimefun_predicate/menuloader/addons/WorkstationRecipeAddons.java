@@ -7,6 +7,7 @@ import io.github.paomiantong.slimefun_predicate.menuloader.ActionType;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunRecipe;
+import lombok.extern.slf4j.Slf4j;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import static io.github.paomiantong.slimefun_predicate.utils.InventoryUtils.clic
 import static io.github.paomiantong.slimefun_predicate.utils.SlimefunUtils.getSlimefunID;
 
 
+@Slf4j
 public class WorkstationRecipeAddons implements Addons {
     private static final Logger LOGGER = LoggerFactory.getLogger(SlimefunPredicateClient.class);
     private static Stack<Action> actionStack;
@@ -98,14 +100,15 @@ public class WorkstationRecipeAddons implements Addons {
                                 SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
                         },
                         type);
-                SlimefunManager.addSlimefunRecipe(recipe);
                 // 此处为了方便代码编写，就不考虑解锁情况了
-                if (!SlimefunManager.hasSlimefunItem(output.getId())) {
+                if (!output.isVanilla() && !SlimefunManager.hasSlimefunItem(output.getId())) {
                     SlimefunManager.addSlimefunItem(output);
                 }
-                if (!SlimefunManager.hasSlimefunItem(input.getId())) {
+                if (!input.isVanilla() && !SlimefunManager.hasSlimefunItem(input.getId())) {
                     SlimefunManager.addSlimefunItem(input);
                 }
+                SlimefunManager.addSlimefunRecipe(recipe);
+                log.info("Add recipe: {}", recipe);
             }
             needPageTurning = hasNext(handler);
             lastState = getPage(handler);

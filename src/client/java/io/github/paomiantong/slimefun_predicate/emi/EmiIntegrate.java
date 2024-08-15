@@ -5,9 +5,10 @@ import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
 import io.github.paomiantong.slimefun_predicate.SlimefunPredicateClient;
-import io.github.paomiantong.slimefun_predicate.emi.recipe.AutoAncientAltarHandler;
+import io.github.paomiantong.slimefun_predicate.emi.handler.AutoAncientAltarHandler;
+import io.github.paomiantong.slimefun_predicate.emi.handler.DivineAltarHandler;
 import io.github.paomiantong.slimefun_predicate.emi.recipe.BaseRecipe;
-import io.github.paomiantong.slimefun_predicate.emi.recipe.GeneralHandler;
+import io.github.paomiantong.slimefun_predicate.emi.handler.GeneralHandler;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunRecipe;
@@ -65,5 +66,6 @@ public class EmiIntegrate implements EmiPlugin {
 
         registry.addRecipeHandler(ScreenHandlerType.GENERIC_3X3, new GeneralHandler());
         registry.addRecipeHandler(SlimefunScreenHandlerType.AUTO_ANCIENT_ALTAR, new AutoAncientAltarHandler());
+        registry.addRecipeHandler(SlimefunScreenHandlerType.DIVINE_ALTAR, new DivineAltarHandler());
     }
 }

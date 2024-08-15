@@ -18,7 +18,7 @@ public abstract class CustomScreenHandler {
     private void onOpenScreen(OpenScreenS2CPacket packet, CallbackInfo ci) {
         if (!CompatUtils.isEmiLoaded()) return;
         String name = packet.getName().getString();
-        if (packet.getScreenHandlerType().equals(ScreenHandlerType.GENERIC_9X6) && SlimefunScreenHandlerType.REGISTRY.containsKey(name)) {
+        if (SlimefunScreenHandlerType.REGISTRY.containsKey(name)) {
             var that = (ClientCommonNetworkHandlerAccessor) this;
             HandledScreens.open(SlimefunScreenHandlerType.REGISTRY.get(name), that.getClient(), packet.getSyncId(), packet.getName());
             System.out.println("open");

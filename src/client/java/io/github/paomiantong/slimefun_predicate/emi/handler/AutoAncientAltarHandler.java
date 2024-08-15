@@ -1,12 +1,14 @@
-package io.github.paomiantong.slimefun_predicate.emi.recipe;
+package io.github.paomiantong.slimefun_predicate.emi.handler;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.handler.StandardRecipeHandler;
+import io.github.paomiantong.slimefun_predicate.emi.recipe.BaseRecipe;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static io.github.paomiantong.slimefun_predicate.utils.InventoryUtils.get9x9Slots;
 
 public class AutoAncientAltarHandler implements StandardRecipeHandler<GenericContainerScreenHandler> {
     @Override
@@ -22,13 +24,13 @@ public class AutoAncientAltarHandler implements StandardRecipeHandler<GenericCon
 
     @Override
     public List<Slot> getCraftingSlots(GenericContainerScreenHandler handler) {
-        final List<Slot> slots = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            int r = (i / 3) * 9;
-            int c = i % 3 + 19;
-            slots.add(handler.getSlot(r + c));
-        }
-        return slots;
+//        final List<Slot> slots = new ArrayList<>();
+//        for (int i = 0; i < 9; i++) {
+//            int r = (i / 3) * 9;
+//            int c = i % 3 + 19;
+//            slots.add(handler.getSlot(r + c));
+//        }
+        return get9x9Slots(handler, 19);
     }
 
     @Override

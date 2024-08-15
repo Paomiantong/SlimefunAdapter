@@ -1,7 +1,8 @@
-package io.github.paomiantong.slimefun_predicate.emi.recipe;
+package io.github.paomiantong.slimefun_predicate.emi.handler;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.handler.StandardRecipeHandler;
+import io.github.paomiantong.slimefun_predicate.emi.recipe.BaseRecipe;
 import net.minecraft.screen.Generic3x3ContainerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 

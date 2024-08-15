@@ -2,6 +2,7 @@ package io.github.paomiantong.slimefun_predicate.utils;
 
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunRecipe;
+import lombok.extern.slf4j.Slf4j;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -11,7 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+@Slf4j
 public class SlimefunUtils {
     public static String getSlimefunID(@NotNull ItemStack stack) {
         @Nullable var nbtComp = stack.get(DataComponentTypes.CUSTOM_DATA);
@@ -97,6 +101,8 @@ public class SlimefunUtils {
         return new SlimefunRecipe(new SlimefunItemStack(output), inputs, type);
     }
 
+    private static final Pattern unlockPathPattern = Pattern.compile("需要在 (.+) 中解锁");
+
     public static String isLockedIngredient(ItemStack stack) {
         if (!stack.getItem().equals(Registries.ITEM.get(Identifier.of("minecraft:barrier")))) {
             return null;
@@ -107,8 +113,13 @@ public class SlimefunUtils {
             return null;
         }
         boolean locked = "已锁定".equals(lore.lines().get(0).getString());
-        String category = lore.lines().get(2).getString().split(" ")[1];
+        Matcher matcher = unlockPathPattern.matcher(lore.lines().get(2).getString());
+        if (!matcher.find()) {
+            log.error("No match:" + lore.lines().get(2).getString());
+            return null;
+        }
         if (locked) {
+            String category = matcher.group(1);
             return category + "/" + name.getString();
         }
         return null;

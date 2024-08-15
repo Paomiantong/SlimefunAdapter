@@ -13,4 +13,8 @@ public class GenericScreenHandler extends GenericContainerScreenHandler {
     public static GenericContainerScreenHandler createAutoAncientAltar(int syncId, PlayerInventory playerInventory) {
         return new GenericScreenHandler(SlimefunScreenHandlerType.AUTO_ANCIENT_ALTAR, syncId, playerInventory, 6);
     }
+
+    public static GenericContainerScreenHandler createDivineAltar(int syncId, PlayerInventory playerInventory) {
+        return new GenericScreenHandler(SlimefunScreenHandlerType.DIVINE_ALTAR, syncId, playerInventory, 3);
+    }
 }

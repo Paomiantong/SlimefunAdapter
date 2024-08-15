@@ -3,14 +3,12 @@ package io.github.paomiantong.slimefun_predicate.slimefun;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.github.paomiantong.slimefun_predicate.SlimefunPredicateClient;
 import io.github.paomiantong.slimefun_predicate.utils.JsonUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,8 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class SlimefunManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SlimefunPredicateClient.class);
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final @Getter Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
     private static final @Getter Map<String, Set<SlimefunRecipe>> slimefunRecipes = new LinkedHashMap<>();
@@ -56,9 +54,11 @@ public class SlimefunManager {
         String id = item.getId();
         if (id.startsWith(":")) {
             vanillaItems.add(id);
+            log.info("Adding vanilla item: {} {}", item, id);
             return;
         }
         slimefunItems.put(item.getId(), item);
+        log.info("Adding item: {} {}", item, id);
     }
 
     public static void addSlimefunRecipe(SlimefunRecipe recipe) {
@@ -98,7 +98,7 @@ public class SlimefunManager {
                         recipe.setInput(i, item);
                     }
                 }
-                LOGGER.info("Unlocked recipe: {}", recipe);
+                log.info("Unlocked recipe: {}", recipe);
             });
             partialUnlockedRecipes.remove(unLockPath);
         }
@@ -130,7 +130,7 @@ public class SlimefunManager {
             loadCompletelyUnlockedCategory();
             initialized = !slimefunItems.isEmpty();
         } catch (Exception e) {
-            LOGGER.warn("Error loading slimefun data: " + e.getMessage());
+            log.warn("Error loading slimefun data: " + e.getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ public class SlimefunManager {
         JsonObject itemJson = new JsonObject();
         slimefunItems.forEach((id, item) -> {
             itemJson.add(id, item.serialize());
-            LOGGER.debug("Saving item: {} {}", item, id);
+            log.debug("Saving item: {} {}", item, id);
         });
         itemJson.add("vanilla", gson.toJsonTree(vanillaItems));
         writeStringToFile(CONFIG_PATH + "/slimefun_items.json", gson.toJson(itemJson));
@@ -195,13 +195,13 @@ public class SlimefunManager {
                     }
                     final SlimefunItemStack item = new SlimefunItemStack(JsonUtils.deserializeItem(entry.getValue().getAsJsonObject()));
                     slimefunItems.put(entry.getKey(), item);
-                    //LOGGER.info("Loaded item: {} {}", item, entry.getKey());
+                    //log.info("Loaded item: {} {}", item, entry.getKey());
                 });
             } catch (IOException e) {
-                LOGGER.warn("Error loading slimefun items: " + e.getMessage());
+                log.warn("Error loading slimefun items: " + e.getMessage());
             }
         }
-        LOGGER.info("Loaded {} slimefun items", slimefunItems.size());
+        log.info("Loaded {} slimefun items", slimefunItems.size());
     }
 
     private static void loadRecipes() {
@@ -214,14 +214,14 @@ public class SlimefunManager {
                     recipes.forEach(recipe -> {
                         final SlimefunRecipe slimefunRecipe = SlimefunRecipe.deserialize(recipe.getAsJsonObject());
                         addSlimefunRecipe(slimefunRecipe);
-                        //LOGGER.info("Loaded recipe: " + slimefunRecipe);
+                        //log.info("Loaded recipe: " + slimefunRecipe);
                     });
                 });
             } catch (IOException e) {
-                LOGGER.warn("Error loading slimefun recipes: " + e.getMessage());
+                log.warn("Error loading slimefun recipes: " + e.getMessage());
             }
         }
-        LOGGER.info("Loaded {} slimefun recipes", slimefunRecipes.size());
+        log.info("Loaded {} slimefun recipes", slimefunRecipes.size());
     }
 
     public static void loadCompletelyUnlockedCategory() {
@@ -231,9 +231,9 @@ public class SlimefunManager {
                 final JsonArray categories = gson.fromJson(Files.newBufferedReader(CATEGORY_JSON_PATH), JsonArray.class);
                 categories.forEach(category -> completelyUnlockedCategory.add(category.getAsString()));
             } catch (IOException e) {
-                LOGGER.warn("Error loading completely unlocked category: " + e.getMessage());
+                log.warn("Error loading completely unlocked category: " + e.getMessage());
             }
         }
-        LOGGER.info("Loaded {} completely unlocked category", completelyUnlockedCategory.size());
+        log.info("Loaded {} completely unlocked category", completelyUnlockedCategory.size());
     }
 }

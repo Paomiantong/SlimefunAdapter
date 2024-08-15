@@ -6,24 +6,25 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SlimefunScreenHandlerType {
-    public static final Map<String, ScreenHandlerType<?>> REGISTRY = new HashMap<>();
+    public static final Map<String, ScreenHandlerType<GenericContainerScreenHandler>> REGISTRY = new HashMap<>();
     public static final ScreenHandlerType<GenericContainerScreenHandler> AUTO_ANCIENT_ALTAR =
             register("auto_ancient_altar", "全自动远古祭坛", GenericScreenHandler::createAutoAncientAltar);
+    public static final ScreenHandlerType<GenericContainerScreenHandler> DIVINE_ALTAR =
+            register("divine_altar", "神圣祭坛", GenericScreenHandler::createDivineAltar);
 
-    private static <T extends ScreenHandler> ScreenHandlerType<T> register(String id, String title, ScreenHandlerType.Factory<T> factory) {
+    public static ScreenHandlerType<GenericContainerScreenHandler> register(String id, String title, ScreenHandlerType.Factory<GenericContainerScreenHandler> factory) {
         var ret = Registry.register(Registries.SCREEN_HANDLER, id, new ScreenHandlerType<>(factory, FeatureFlags.VANILLA_FEATURES));
         REGISTRY.put(title, ret);
         return ret;
     }
 
     public static void register() {
-        HandledScreens.register(AUTO_ANCIENT_ALTAR, GenericContainerScreen::new);
+        REGISTRY.forEach((title, type) -> HandledScreens.register(type, GenericContainerScreen::new));
     }
 }
