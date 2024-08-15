@@ -12,6 +12,7 @@ import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunRecipe;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunRecipeCategory;
+import io.github.paomiantong.slimefun_predicate.slimefun.screen.SlimefunScreenHandlerType;
 import io.github.paomiantong.slimefun_predicate.utils.SlimefunUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -63,6 +64,6 @@ public class EmiIntegrate implements EmiPlugin {
         }
 
         registry.addRecipeHandler(ScreenHandlerType.GENERIC_3X3, new GeneralHandler());
-        registry.addRecipeHandler(ScreenHandlerType.GENERIC_9X6, new AutoAncientAltarHandler());
+        registry.addRecipeHandler(SlimefunScreenHandlerType.AUTO_ANCIENT_ALTAR, new AutoAncientAltarHandler());
     }
 }

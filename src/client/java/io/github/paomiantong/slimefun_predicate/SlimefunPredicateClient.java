@@ -3,6 +3,8 @@ package io.github.paomiantong.slimefun_predicate;
 import io.github.paomiantong.slimefun_predicate.config.Config;
 import io.github.paomiantong.slimefun_predicate.menuloader.SyncSlimefunMenu;
 import io.github.paomiantong.slimefun_predicate.slimefun.SlimefunManager;
+import io.github.paomiantong.slimefun_predicate.slimefun.screen.SlimefunScreenHandlerType;
+import io.github.paomiantong.slimefun_predicate.utils.CompatUtils;
 import io.github.paomiantong.slimefun_predicate.utils.ShowComponents;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -28,8 +30,9 @@ public class SlimefunPredicateClient implements ClientModInitializer {
 
         SyncSlimefunMenu.registerCommands();
         ShowComponents.registerCommands();
-        BackPackHelper.register();
 
+        BackPackHelper.register();
         ModelPredicateProviderRegistry.register(Identifier.of("sf_predict", "sf_item"), new SFPredicateProvider());
+        SlimefunScreenHandlerType.register();
     }
 }
