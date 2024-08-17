@@ -10,7 +10,13 @@ import java.util.List;
 
 import static io.github.paomiantong.slimefun_predicate.utils.InventoryUtils.get9x9Slots;
 
-public class DivineAltarHandler implements StandardRecipeHandler<GenericContainerScreenHandler> {
+public class AlchimiaVitaeHandler implements StandardRecipeHandler<GenericContainerScreenHandler> {
+    private final String type;
+
+    public AlchimiaVitaeHandler(String type) {
+        this.type = type;
+    }
+
     @Override
     public List<Slot> getInputSources(GenericContainerScreenHandler handler) {
         final List<Slot> slots = getCraftingSlots(handler);
@@ -28,6 +34,6 @@ public class DivineAltarHandler implements StandardRecipeHandler<GenericContaine
 
     @Override
     public boolean supportsRecipe(EmiRecipe recipe) {
-        return recipe instanceof BaseRecipe gridRecipe && "AV_DIVINE_ALTAR".equals(gridRecipe.getType());
+        return recipe instanceof BaseRecipe gridRecipe && type.equals(gridRecipe.getType());
     }
 }
