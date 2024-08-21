@@ -18,8 +18,8 @@ public class SlimefunPredicateClient implements ClientModInitializer {
             "key.slimefun_predicate.tooltip",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_LEFT_ALT,
-            KeyBinding.INVENTORY_CATEGORY)
-    );
+            KeyBinding.INVENTORY_CATEGORY
+    ));
 
     @Override
     public void onInitializeClient() {

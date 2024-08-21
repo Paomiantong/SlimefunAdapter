@@ -25,6 +25,7 @@ public final class Config {
     private static final Map<String, Double> item_models = new HashMap<>();
     private static final Path CONFIG_PATH = Paths.get("config/slimefun-predicate/item-models-remap.yml");
     private static final String DEFAULT_CONFIG_PATH = "/remap.yml";
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Configurable
     @Setter
@@ -98,7 +99,7 @@ public final class Config {
             try {
                 inputStream = new FileInputStream(CONFIG_PATH.toFile());
             } catch (FileNotFoundException e) {
-                LOGGER.error("Failed to load configuration: {}", e.getMessage());
+                LOGGER.error("Failed to load model: {}", e.getMessage());
                 return;
             }
         } else {
@@ -109,8 +110,6 @@ public final class Config {
         item_models.putAll(yaml.load(inputStream));
         LOGGER.info("Loaded {} item models", item_models.size());
     }
-
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void loadConfig() {
         File configFile = getConfigFile();

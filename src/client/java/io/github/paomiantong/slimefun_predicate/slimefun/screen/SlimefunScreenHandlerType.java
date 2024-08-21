@@ -51,7 +51,7 @@ public class SlimefunScreenHandlerType {
         return ret;
     }
 
-    public static ScreenHandlerType.Factory<GenericContainerScreenHandler> buildFactory(int rows, Field typeField) {
+    private static ScreenHandlerType.Factory<GenericContainerScreenHandler> buildFactory(int rows, Field typeField) {
         assert typeField.getType() == ScreenHandlerType.class;
         assert typeField.getGenericType() == GenericContainerScreenHandler.class;
         return (syncId, playerInventory) -> {

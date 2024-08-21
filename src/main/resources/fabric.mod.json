@@ -22,7 +22,7 @@
     ]
   },
   "mixins": [
-    "slimefunid.mixin.json"
+    "mixins.mixin.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
