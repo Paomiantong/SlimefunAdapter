@@ -21,7 +21,7 @@ import static io.github.paomiantong.slimefun_predicate.utils.SlimefunUtils.getSl
 import static io.github.paomiantong.slimefun_predicate.utils.SlimefunUtils.isSlimefunItem;
 
 @Mixin(ItemStack.class)
-public class TooltipChanger {
+public class MixinItemStack {
     @Inject(method = "getTooltip", at = @At("RETURN"), cancellable = true)
     protected void injectEditTooltipMethod(Item.TooltipContext context, PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> info) {
 

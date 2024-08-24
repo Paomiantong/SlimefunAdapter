@@ -13,14 +13,15 @@ import net.minecraft.util.Identifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Slf4j
+import static io.github.paomiantong.slimefun_predicate.config.Config.CONFIG_PATH;
+import static io.github.paomiantong.slimefun_predicate.config.Config.writeStringToFile;
+
+@Slf4j(topic = "SlimefunPredicate")
 public class SlimefunManager {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final @Getter Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
@@ -30,21 +31,6 @@ public class SlimefunManager {
     private static final @Getter Set<String> vanillaItems = new HashSet<>();
     private static final @Getter Set<String> completelyUnlockedCategory = new HashSet<>();
     private static @Getter boolean initialized = false;
-    private static final Path CONFIG_PATH = Paths.get("config/slimefun-predicate/");
-
-    public static void writeStringToFile(String fileName, String content) {
-        Path path = Paths.get(fileName);
-        try {
-            // 确保父目录存在
-            if (path.getParent() != null) {
-                Files.createDirectories(path.getParent());
-            }
-            // 使用StandardCharsets.UTF_8确保字符编码的一致性
-            Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
-        }
-    }
 
     public static boolean hasSlimefunItem(String id) {
         return slimefunRecipes.containsKey(id) || vanillaItems.contains(id);
@@ -167,7 +153,7 @@ public class SlimefunManager {
             log.debug("Saving item: {} {}", item, id);
         });
         itemJson.add("vanilla", gson.toJsonTree(vanillaItems));
-        writeStringToFile(CONFIG_PATH + "/slimefun_items.json", gson.toJson(itemJson));
+        writeStringToFile("slimefun_items.json", gson.toJson(itemJson));
 
         JsonObject recipeJson = new JsonObject();
         slimefunRecipes.forEach((id, recipe) -> {
@@ -175,15 +161,15 @@ public class SlimefunManager {
             recipe.forEach(r -> recipes.add(r.serialize()));
             recipeJson.add(id, recipes);
         });
-        writeStringToFile(CONFIG_PATH + "/slimefun_recipes.json", gson.toJson(recipeJson));
+        writeStringToFile("slimefun_recipes.json", gson.toJson(recipeJson));
 
         JsonArray categories = new JsonArray();
         completelyUnlockedCategory.forEach(categories::add);
-        writeStringToFile(CONFIG_PATH + "/completely_unlocked_category.json", gson.toJson(categories));
+        writeStringToFile("completely_unlocked_category.json", gson.toJson(categories));
     }
 
     private static void loadItems() {
-        final Path ITEM_JSON_PATH = Path.of(CONFIG_PATH + "/slimefun_items.json");
+        final Path ITEM_JSON_PATH = CONFIG_PATH.resolve("slimefun_items.json");
         if (Files.exists(ITEM_JSON_PATH)) {
             try {
                 final JsonObject itemJson = gson.fromJson(Files.newBufferedReader(ITEM_JSON_PATH), JsonObject.class);
@@ -205,7 +191,7 @@ public class SlimefunManager {
     }
 
     private static void loadRecipes() {
-        final Path RECIPE_JSON_PATH = Path.of(CONFIG_PATH + "/slimefun_recipes.json");
+        final Path RECIPE_JSON_PATH = CONFIG_PATH.resolve("slimefun_recipes.json");
         if (Files.exists(RECIPE_JSON_PATH)) {
             try {
                 final JsonObject recipeJson = gson.fromJson(Files.newBufferedReader(RECIPE_JSON_PATH), JsonObject.class);
@@ -225,7 +211,7 @@ public class SlimefunManager {
     }
 
     public static void loadCompletelyUnlockedCategory() {
-        final Path CATEGORY_JSON_PATH = Path.of(CONFIG_PATH + "/completely_unlocked_category.json");
+        final Path CATEGORY_JSON_PATH = CONFIG_PATH.resolve("completely_unlocked_category.json");
         if (Files.exists(CATEGORY_JSON_PATH)) {
             try {
                 final JsonArray categories = gson.fromJson(Files.newBufferedReader(CATEGORY_JSON_PATH), JsonArray.class);

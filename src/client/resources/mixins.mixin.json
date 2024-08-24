@@ -4,8 +4,10 @@
   "package": "io.github.paomiantong.slimefun_predicate.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "CustomScreenHandler",
-    "TooltipChanger"
+    "MixinClientPlayNetworkHandler",
+    "MixinHandledScreen",
+    "MixinItemStack",
+    "MixinMinecraftClient"
   ],
   "injectors": {
     "defaultRequire": 1

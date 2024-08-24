@@ -10,7 +10,7 @@
   "config.slimefun_predicate.sync.ticks_per_action": "扫频频率(tick/次)",
   "config.slimefun_predicate.title": "粘液科科技增强",
   "key.slimefun_predicate.backpack": "打开背包",
-  "key.slimefun_predicate.tooltip": "显示粘液科技物品ID",
+  "key.slimefun_predicate.tooltip": "显示粘液科技物品ID/显示粘液背包",
   "message.slimefun_predicate.slimefun_data_not_loaded": "粘液科技数据未加载, 请先同步数据，输入 /sync_menu help来获取更多信息。",
   "slimefun_predicate.tooltip": "Slimefun ID: "
 }

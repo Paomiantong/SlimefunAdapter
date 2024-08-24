@@ -124,4 +124,17 @@ public class SlimefunUtils {
         }
         return null;
     }
+
+    public static String getInventoryUUID(ItemStack stack) {
+        @Nullable var nbtComp = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (nbtComp == null) {
+            return null;
+        }
+        var values = nbtComp.copyNbt().getCompound("PublicBukkitValues");
+        return values.getString("slimefun:b_uuid");
+    }
+
+    public static boolean isBackpack(ItemStack stack) {
+        return getSlimefunID(stack).endsWith("BACKPACK");
+    }
 }

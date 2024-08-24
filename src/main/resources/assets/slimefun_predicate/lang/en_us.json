@@ -10,7 +10,7 @@
   "config.slimefun_predicate.sync.ticks_per_action": "Ticks per action",
   "config.slimefun_predicate.title": "Slimefun Predicate",
   "key.slimefun_predicate.backpack": "Open the backpack",
-  "key.slimefun_predicate.tooltip": "Show Slimefun id",
+  "key.slimefun_predicate.tooltip": "Show Slimefun id/Preview BackPack",
   "message.slimefun_predicate.slimefun_data_not_loaded": "Slimefun data is not loaded, please sync menu first. type /sync_menu help for more information.",
   "slimefun_predicate.tooltip": "Slimefun ID: "
 }

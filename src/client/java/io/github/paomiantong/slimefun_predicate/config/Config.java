@@ -3,28 +3,28 @@ package io.github.paomiantong.slimefun_predicate.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.paomiantong.slimefun_predicate.SlimefunPredicateClient;
 import io.github.paomiantong.slimefun_predicate.utils.ConfigUtils;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.fabricmc.loader.api.FabricLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j(topic = "SlimefunPredicate")
 public final class Config {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SlimefunPredicateClient.class);
     private static final Map<String, Double> item_models = new HashMap<>();
-    private static final Path CONFIG_PATH = Paths.get("config/slimefun-predicate/item-models-remap.yml");
-    private static final String DEFAULT_CONFIG_PATH = "/remap.yml";
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("slimefun-predicate");
+    private static final Path MODEL_DATA_PATH = Paths.get("config/slimefun-predicate/item-models-remap.yml");
+    private static final String DEFAULT_MODEL_DATA_PATH = "/remap.yml";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Configurable
@@ -94,21 +94,21 @@ public final class Config {
         InputStream inputStream;
 
 
-        if (Files.exists(CONFIG_PATH)) {
-            LOGGER.info("Loading configuration from {}", CONFIG_PATH);
+        if (Files.exists(MODEL_DATA_PATH)) {
+            log.info("Loading configuration from {}", MODEL_DATA_PATH);
             try {
-                inputStream = new FileInputStream(CONFIG_PATH.toFile());
+                inputStream = new FileInputStream(MODEL_DATA_PATH.toFile());
             } catch (FileNotFoundException e) {
-                LOGGER.error("Failed to load model: {}", e.getMessage());
+                log.error("Failed to load model: {}", e.getMessage());
                 return;
             }
         } else {
             // 从resources加载默认配置
-            LOGGER.info("Loading default configuration from resources");
-            inputStream = Config.class.getResourceAsStream(DEFAULT_CONFIG_PATH);
+            log.info("Loading default configuration from resources");
+            inputStream = Config.class.getResourceAsStream(DEFAULT_MODEL_DATA_PATH);
         }
         item_models.putAll(yaml.load(inputStream));
-        LOGGER.info("Loaded {} item models", item_models.size());
+        log.info("Loaded {} item models", item_models.size());
     }
 
     public static void loadConfig() {
@@ -129,21 +129,21 @@ public final class Config {
                     if (value == null) {
                         return;
                     }
-                    LOGGER.info("{}: {}", field.getName(), config.get(field.getName()));
+                    log.info("{}: {}", field.getName(), config.get(field.getName()));
                     field.set(null, value);
                 } catch (IllegalAccessException e) {
-                    LOGGER.error("Failed to load configuration: {}", e.getMessage());
+                    log.error("Failed to load configuration: {}", e.getMessage());
                 }
             });
         } catch (IOException e) {
-            LOGGER.error("Failed to load configuration: {}", e.getMessage());
+            log.error("Failed to load configuration: {}", e.getMessage());
         }
     }
 
     public static void saveConfig() {
         File configFile = getConfigFile();
         if (configFile == null) {
-            LOGGER.error("Failed to save configuration: configuration file not found");
+            log.error("Failed to save configuration: configuration file not found");
             return;
         }
         try (FileWriter writer = new FileWriter(configFile)) {
@@ -152,12 +152,12 @@ public final class Config {
                 try {
                     instance.add(field.getName(), gson.toJsonTree(field.get(null)));
                 } catch (IllegalAccessException e) {
-                    LOGGER.error("Failed to save configuration: {}", e.getMessage());
+                    log.error("Failed to save configuration: {}", e.getMessage());
                 }
             });
             gson.toJson(instance, writer);
         } catch (IOException e) {
-            LOGGER.error("Failed to save configuration: {}", e.getMessage());
+            log.error("Failed to save configuration: {}", e.getMessage());
         }
     }
 
@@ -170,10 +170,24 @@ public final class Config {
                     throw new IOException();
                 }
             } catch (IOException | SecurityException e) {
-                LOGGER.error("Failed to create configuration file: {}", e.getMessage());
+                log.error("Failed to create configuration file: {}", e.getMessage());
                 return null;
             }
         }
         return configFile;
+    }
+
+    public static void writeStringToFile(String fileName, String content) {
+        Path path = CONFIG_PATH.resolve(fileName);
+        try {
+            // 确保父目录存在
+            if (path.getParent() != null) {
+                Files.createDirectories(path.getParent());
+            }
+            // 使用StandardCharsets.UTF_8确保字符编码的一致性
+            Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
     }
 }
