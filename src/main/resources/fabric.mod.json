@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "slimefun_predicate",
+  "id": "slimefun_adapter",
   "version": "${version}",
-  "name": "slimefun_predicate",
+  "name": "slimefun_adapter",
   "description": "ClientSide Enhancement mod for Slimefun4",
   "authors": [
     "Exbuekct_"
@@ -12,13 +12,13 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.paomiantong.slimefun_predicate.SlimefunPredicateClient"
+      "io.github.paomiantong.slimefunadapter.SlimefunAdapterClient"
     ],
     "modmenu": [
-      "io.github.paomiantong.slimefun_predicate.config.ModMenuIntegration"
+      "io.github.paomiantong.slimefunadapter.config.ModMenuIntegration"
     ],
     "emi": [
-      "io.github.paomiantong.slimefun_predicate.emi.EmiIntegrate"
+      "io.github.paomiantong.slimefunadapter.emi.EmiIntegrate"
     ]
   },
   "mixins": [

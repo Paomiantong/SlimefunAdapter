@@ -1,0 +1,193 @@
+package io.github.paomiantong.slimefunadapter.config;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import io.github.paomiantong.slimefunadapter.utils.ConfigUtils;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import net.fabricmc.loader.api.FabricLoader;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+@Slf4j(topic = "SlimefunPredicate")
+public final class Config {
+    private static final Map<String, Double> item_models = new HashMap<>();
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("slimefun-predicate");
+    private static final Path MODEL_DATA_PATH = Paths.get("config/slimefun-predicate/item-models-remap.yml");
+    private static final String DEFAULT_MODEL_DATA_PATH = "/remap.yml";
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    @Configurable
+    @Setter
+    public static int TICKS_PER_ACTION = 1;
+
+    @Configurable
+    @Setter
+    public static HashSet<String> EXCLUDE = new HashSet<>(List.of(
+            "UU 物质合成表",
+            "魔法水晶编年史",
+            "幽灵方块",
+            "攀岩镐"
+    ));
+
+    @Configurable
+    @Setter
+    public static HashSet<String> SPECIAL = new HashSet<>(List.of(
+            "FILLED_FLASK_OF_KNOWLEDGE"
+    ));
+
+    @Configurable
+    @Setter
+    public static HashSet<String> EXCLUDE_WORKSTATION = new HashSet<>(List.of(
+            "CULINARY_GENERATOR",
+            "STARDUST_REACTOR",
+            "SMART_FACTORY"
+    ));
+
+    @Configurable
+    @Setter
+    public static HashSet<String> SUPPORT_RECIPE_CATEGORY = new HashSet<>(List.of("MAGIC_WORKBENCH",
+            "ENHANCED_CRAFTING_TABLE",
+            "SMELTERY",
+            "PRESSURE_CHAMBER",
+            "ORE_CRUSHER",
+            "ORE_WASHER",
+            "COMPRESSOR",
+            "JUICER",
+            "GRIND_STONE",
+            "ARMOR_FORGE",
+            "METAL_FORGE",
+            "REFINED_SMELTERY"
+//            "ANCIENT_ALTAR",
+    ));
+
+    @Configurable
+    @Setter
+    public static HashSet<String> MENU_TITLE = new HashSet<>(List.of(
+            "Slimefun 指南",
+            "炼金术自传"
+    ));
+
+//    @Configurable
+//    @Setter
+//    public static HashSet<String> SERIES_WORKSTATION = new HashSet<>(List.of(
+//            "FREEZER"
+//    ));
+
+
+    public static float getModel(String sf_id) {
+        return item_models.getOrDefault(sf_id, 0.).floatValue();
+    }
+
+    public static void loadModel() {
+        Yaml yaml = new Yaml();
+        InputStream inputStream;
+
+
+        if (Files.exists(MODEL_DATA_PATH)) {
+            log.info("Loading configuration from {}", MODEL_DATA_PATH);
+            try {
+                inputStream = new FileInputStream(MODEL_DATA_PATH.toFile());
+            } catch (FileNotFoundException e) {
+                log.error("Failed to load model: {}", e.getMessage());
+                return;
+            }
+        } else {
+            // 从resources加载默认配置
+            log.info("Loading default configuration from resources");
+            inputStream = Config.class.getResourceAsStream(DEFAULT_MODEL_DATA_PATH);
+        }
+        item_models.putAll(yaml.load(inputStream));
+        log.info("Loaded {} item models", item_models.size());
+    }
+
+    public static void loadConfig() {
+        File configFile = getConfigFile();
+        if (configFile == null) {
+            return;
+        }
+        try (FileReader reader = new FileReader(configFile)) {
+            var cls = Config.class;
+            JsonObject config = gson.fromJson(reader, JsonObject.class);
+            if (config == null) {
+                saveConfig();
+                return;
+            }
+            ConfigUtils.getConfigurableFields(cls).forEach(field -> {
+                try {
+                    var value = gson.fromJson(config.get(field.getName()), field.getType());
+                    if (value == null) {
+                        return;
+                    }
+                    log.info("{}: {}", field.getName(), config.get(field.getName()));
+                    field.set(null, value);
+                } catch (IllegalAccessException e) {
+                    log.error("Failed to load configuration: {}", e.getMessage());
+                }
+            });
+        } catch (IOException e) {
+            log.error("Failed to load configuration: {}", e.getMessage());
+        }
+    }
+
+    public static void saveConfig() {
+        File configFile = getConfigFile();
+        if (configFile == null) {
+            log.error("Failed to save configuration: configuration file not found");
+            return;
+        }
+        try (FileWriter writer = new FileWriter(configFile)) {
+            JsonObject instance = new JsonObject();
+            ConfigUtils.getConfigurableFields(Config.class).forEach(field -> {
+                try {
+                    instance.add(field.getName(), gson.toJsonTree(field.get(null)));
+                } catch (IllegalAccessException e) {
+                    log.error("Failed to save configuration: {}", e.getMessage());
+                }
+            });
+            gson.toJson(instance, writer);
+        } catch (IOException e) {
+            log.error("Failed to save configuration: {}", e.getMessage());
+        }
+    }
+
+    public static File getConfigFile() {
+        final File configFile = FabricLoader.getInstance().getConfigDir().resolve("slimefun_predicate.json").toFile();
+        if (!configFile.exists()) {
+            try {
+                configFile.getParentFile().mkdirs();
+                if (!configFile.createNewFile()) {
+                    throw new IOException();
+                }
+            } catch (IOException | SecurityException e) {
+                log.error("Failed to create configuration file: {}", e.getMessage());
+                return null;
+            }
+        }
+        return configFile;
+    }
+
+    public static void writeStringToFile(String fileName, String content) {
+        Path path = CONFIG_PATH.resolve(fileName);
+        try {
+            // 确保父目录存在
+            if (path.getParent() != null) {
+                Files.createDirectories(path.getParent());
+            }
+            // 使用StandardCharsets.UTF_8确保字符编码的一致性
+            Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+}
