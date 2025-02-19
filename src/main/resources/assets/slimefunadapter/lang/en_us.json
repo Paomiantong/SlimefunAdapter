@@ -1,6 +1,9 @@
 {
+  "text.slimefunadapter.tooltip": "SlimefunID",
   "message.slimefunadapter.slimefun_data_not_loaded": "Slimefun Data Not Loaded",
   "key.slimefunadapter.tooltip": "Slimefun Tooltip",
+  "category.slimefunadapter.title": "Slimefun Adapter",
+  "key.slimefunadapter.backpack": "Open Backpack",
   "config.slimefunadapter.title": "Slimefun Adapter",
   "config.slimefunadapter.emi": "EMI",
   "config.slimefunadapter.emi.support_recipe_category": "Support Recipe Category",

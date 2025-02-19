@@ -43,7 +43,7 @@ public class BackPackHelper {
             "key.slimefunadapter.backpack", // The translation key of the keybinding's name
             InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
             GLFW.GLFW_KEY_B, // The keycode of the key
-            "category.slimefunadapter.backpack" // The translation key of the keybinding's category.
+            "category.slimefunadapter" // The translation key of the keybinding's category.
     ));
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Pattern pattern = Pattern.compile(".* \\[大小 \\d+\\]");

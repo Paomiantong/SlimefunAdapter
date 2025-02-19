@@ -28,12 +28,12 @@ public class BaseRecipe implements EmiRecipe {
     private final boolean supportRecipe;
 
     public BaseRecipe(SlimefunRecipe recipe, SlimefunEmiCategory category) {
-        String path;
+        String path = "/";
         if (recipe.getOutput().isVanilla()) {
-            path = recipe.getOutput().getId().replace("minecraft:", "").toLowerCase(Locale.ROOT);
+            path += recipe.getOutput().getId().replace("minecraft:", "").toLowerCase(Locale.ROOT);
         } else {
 
-            path = recipe.getOutput().getId().toLowerCase(Locale.ROOT);
+            path += recipe.getOutput().getId().toLowerCase(Locale.ROOT);
         }
         path += "_" + recipe.hashCode() + "_" + category.getId().getPath();
         this.id = Identifier.of("slimefun", path);

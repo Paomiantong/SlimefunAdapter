@@ -18,9 +18,7 @@ public class SyncSlimefunMenu {
     private static boolean monitorRegistered = false;
 
     public static void registerCommands() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-            registerOpenMenuCommand(dispatcher);
-        });
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->    registerOpenMenuCommand(dispatcher));
     }
 
     private static void registerOpenMenuCommand(CommandDispatcher<FabricClientCommandSource> dispatcher) {

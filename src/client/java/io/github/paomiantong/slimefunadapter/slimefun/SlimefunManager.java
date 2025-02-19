@@ -137,9 +137,7 @@ public class SlimefunManager {
             var type = category.type();
             if (!type.isVanilla() && slimefunItems.containsKey(type.getId())) {
                 final var finalType = slimefunItems.get(type.getId());
-                category.recipes().forEach(recipe -> {
-                    recipe.setType(finalType);
-                });
+                category.recipes().forEach(recipe -> recipe.setType(finalType));
                 entry.setValue(new SlimefunRecipeCategory(finalType, category.recipes()));
             }
         });

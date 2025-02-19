@@ -1,6 +1,9 @@
 {
+  "text.slimefunadapter.tooltip": "粘液ID",
   "message.slimefunadapter.slimefun_data_not_loaded": "粘液科技数据未加载",
   "key.slimefunadapter.tooltip": "粘液科技工具提示",
+  "category.slimefunadapter.title": "粘液科技适配器",
+  "key.slimefunadapter.backpack": "打开背包",
   "config.slimefunadapter.title": "粘液科技适配器",
   "config.slimefunadapter.emi": "EMI",
   "config.slimefunadapter.emi.support_recipe_category": "支持的配方类别",

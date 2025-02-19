@@ -35,7 +35,7 @@ public class MixinItemStack {
             List<Text> list = info.getReturnValue();
 
             if (isSlimefunItem(itemStack)) {
-                MutableText mutableText = Text.translatable("slimefun_predicate.tooltip").formatted(Formatting.GREEN, Formatting.BOLD);
+                MutableText mutableText = Text.translatable("text.slimefunadapter.tooltip").formatted(Formatting.GREEN, Formatting.BOLD);
                 mutableText.append(Text.literal(getSlimefunID(itemStack)).formatted(Formatting.GRAY));
                 list.add(mutableText);
                 info.setReturnValue(list);

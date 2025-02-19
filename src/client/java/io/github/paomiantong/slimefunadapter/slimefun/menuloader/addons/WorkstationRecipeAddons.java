@@ -2,13 +2,12 @@ package io.github.paomiantong.slimefunadapter.slimefun.menuloader.addons;
 
 import io.github.paomiantong.slimefunadapter.SlimefunAdapterClient;
 import io.github.paomiantong.slimefunadapter.config.Config;
-import io.github.paomiantong.slimefunadapter.slimefun.menuloader.Action;
-import io.github.paomiantong.slimefunadapter.slimefun.menuloader.ActionType;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunRecipe;
+import io.github.paomiantong.slimefunadapter.slimefun.menuloader.actions.Action;
+import io.github.paomiantong.slimefunadapter.slimefun.menuloader.actions.ExecutionContext;
 import lombok.extern.slf4j.Slf4j;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -76,17 +75,18 @@ public class WorkstationRecipeAddons implements Addons {
         }
         needPageTurning = hasNext(handler);
         lastState = getPage(handler);
-        actionStack.push(new Action(NEXT_PAGE, -1, null));
+        actionStack.push(NEXT_PAGE);
     }
 
-    private static final ActionType NEXT_PAGE = new ActionType() {
+    private static final Action NEXT_PAGE = new Action(-1) {
         @Override
-        public boolean requireAwait() {
-            return needPageTurning;
+        public boolean await(ScreenHandler handler) {
+            return needPageTurning && AWAIT.test(handler);
         }
 
         @Override
-        public void runAction(MinecraftClient client, ScreenHandler handler, int slotId) {
+        public void execute(ExecutionContext context) {
+            var handler = context.handler();
             for (int i = 36; i < 36 + 9; i++) {
                 SlimefunItemStack input = new SlimefunItemStack(handler.getSlot(i).getStack().copy());
                 SlimefunItemStack output = new SlimefunItemStack(handler.getSlot(i + 9).getStack().copy());
@@ -116,17 +116,8 @@ public class WorkstationRecipeAddons implements Addons {
                 var pageInfo = getPageInfo(lastState);
                 needPageTurning = pageInfo[0] + 1 < pageInfo[1];
                 clickSlot(handler, 34);
-                actionStack.push(new Action(NEXT_PAGE, -1, null));
+                actionStack.push(NEXT_PAGE);
             }
-        }
-
-        public Predicate<ScreenHandler> getAwaitPredicate() {
-            return AWAIT;
-        }
-
-        @Override
-        public String toString() {
-            return "WorkstationRecipeAddons: " + needPageTurning;
         }
     };
 }
