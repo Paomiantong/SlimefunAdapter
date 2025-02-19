@@ -1,4 +1,4 @@
-package io.github.paomiantong.slimefunadapter.menuloader;
+package io.github.paomiantong.slimefunadapter.slimefun.menuloader;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.screen.ScreenHandler;

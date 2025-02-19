@@ -1,7 +1,7 @@
 package io.github.paomiantong.slimefunadapter.mixin;
 
 
-import io.github.paomiantong.slimefunadapter.BackPackHelper;
+import io.github.paomiantong.slimefunadapter.slimefun.BackPackHelper;
 import io.github.paomiantong.slimefunadapter.slimefun.screen.SlimefunScreenHandlerType;
 import io.github.paomiantong.slimefunadapter.utils.CompatUtils;
 import lombok.extern.slf4j.Slf4j;

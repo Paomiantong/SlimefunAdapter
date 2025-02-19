@@ -1,4 +1,4 @@
-package io.github.paomiantong.slimefunadapter;
+package io.github.paomiantong.slimefunadapter.slimefun;
 
 import io.github.paomiantong.slimefunadapter.config.Config;
 import net.minecraft.client.item.ClampedModelPredicateProvider;
@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public final class SFPredicateProvider implements ClampedModelPredicateProvider {
+public final class SlimefunPredicateProvider implements ClampedModelPredicateProvider {
     @Override
     public float unclampedCall(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed) {
         @Nullable var nbtComp = stack.get(DataComponentTypes.CUSTOM_DATA);

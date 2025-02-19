@@ -1,6 +1,6 @@
-package io.github.paomiantong.slimefunadapter.menuloader.addons;
+package io.github.paomiantong.slimefunadapter.slimefun.menuloader.addons;
 
-import io.github.paomiantong.slimefunadapter.menuloader.Action;
+import io.github.paomiantong.slimefunadapter.slimefun.menuloader.Action;
 import net.minecraft.screen.ScreenHandler;
 
 import java.util.Stack;

@@ -1,4 +1,4 @@
-package io.github.paomiantong.slimefunadapter.menuloader;
+package io.github.paomiantong.slimefunadapter.slimefun.menuloader;
 
 import lombok.Getter;
 import lombok.Setter;

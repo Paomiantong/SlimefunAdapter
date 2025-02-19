@@ -1,4 +1,4 @@
-package io.github.paomiantong.slimefunadapter;
+package io.github.paomiantong.slimefunadapter.slimefun;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

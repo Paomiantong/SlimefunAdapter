@@ -15,10 +15,10 @@
       "io.github.paomiantong.slimefunadapter.SlimefunAdapterClient"
     ],
     "modmenu": [
-      "io.github.paomiantong.slimefunadapter.config.ModMenuIntegration"
+      "io.github.paomiantong.slimefunadapter.compat.ModMenuIntegration"
     ],
     "emi": [
-      "io.github.paomiantong.slimefunadapter.emi.EmiIntegrate"
+      "io.github.paomiantong.slimefunadapter.compat.EmiIntegrate"
     ]
   },
   "mixins": [

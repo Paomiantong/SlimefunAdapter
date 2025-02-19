@@ -1,9 +1,9 @@
-package io.github.paomiantong.slimefunadapter.menuloader.addons;
+package io.github.paomiantong.slimefunadapter.slimefun.menuloader.addons;
 
 import io.github.paomiantong.slimefunadapter.SlimefunAdapterClient;
 import io.github.paomiantong.slimefunadapter.config.Config;
-import io.github.paomiantong.slimefunadapter.menuloader.Action;
-import io.github.paomiantong.slimefunadapter.menuloader.ActionType;
+import io.github.paomiantong.slimefunadapter.slimefun.menuloader.Action;
+import io.github.paomiantong.slimefunadapter.slimefun.menuloader.ActionType;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunRecipe;

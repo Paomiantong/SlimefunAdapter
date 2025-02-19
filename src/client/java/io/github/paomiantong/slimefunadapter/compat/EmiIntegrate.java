@@ -1,10 +1,11 @@
-package io.github.paomiantong.slimefunadapter.emi;
+package io.github.paomiantong.slimefunadapter.compat;
 
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
 import io.github.paomiantong.slimefunadapter.SlimefunAdapterClient;
+import io.github.paomiantong.slimefunadapter.emi.SlimefunEmiCategory;
 import io.github.paomiantong.slimefunadapter.emi.handler.AlchimiaVitaeHandler;
 import io.github.paomiantong.slimefunadapter.emi.handler.AutoAncientAltarHandler;
 import io.github.paomiantong.slimefunadapter.emi.handler.GeneralHandler;

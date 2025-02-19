@@ -1,0 +1,13 @@
+{
+  "message.slimefunadapter.slimefun_data_not_loaded": "Slimefun Data Not Loaded",
+  "key.slimefunadapter.tooltip": "Slimefun Tooltip",
+  "config.slimefunadapter.title": "Slimefun Adapter",
+  "config.slimefunadapter.emi": "EMI",
+  "config.slimefunadapter.emi.support_recipe_category": "Support Recipe Category",
+  "config.slimefunadapter.sync.ticks_per_action": "Synchronization frequency (ticks/action)",
+  "config.slimefunadapter.sync.exclude": "Exclude Sync Items",
+  "config.slimefunadapter.sync.special": "Special Sync Items",
+  "config.slimefunadapter.sync.exclude_workstation": "Exclude Sync Workstation",
+  "config.slimefunadapter.sync.menu_title": "Slimefun Menu Title",
+  "config.slimefunadapter.sync": "Menu Sync"
+}

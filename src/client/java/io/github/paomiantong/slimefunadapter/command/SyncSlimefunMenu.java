@@ -1,7 +1,8 @@
-package io.github.paomiantong.slimefunadapter.menuloader;
+package io.github.paomiantong.slimefunadapter.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunManager;
+import io.github.paomiantong.slimefunadapter.slimefun.menuloader.MenuSynchronizer;
 import io.github.paomiantong.slimefunadapter.utils.SlimefunUtils;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;

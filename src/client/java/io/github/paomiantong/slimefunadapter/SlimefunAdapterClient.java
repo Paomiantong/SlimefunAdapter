@@ -1,8 +1,10 @@
 package io.github.paomiantong.slimefunadapter;
 
 import io.github.paomiantong.slimefunadapter.config.Config;
-import io.github.paomiantong.slimefunadapter.menuloader.SyncSlimefunMenu;
+import io.github.paomiantong.slimefunadapter.command.SyncSlimefunMenu;
+import io.github.paomiantong.slimefunadapter.slimefun.BackPackHelper;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunManager;
+import io.github.paomiantong.slimefunadapter.slimefun.SlimefunPredicateProvider;
 import io.github.paomiantong.slimefunadapter.slimefun.screen.SlimefunScreenHandlerType;
 import io.github.paomiantong.slimefunadapter.utils.ShowComponents;
 import net.fabricmc.api.ClientModInitializer;
@@ -31,7 +33,7 @@ public class SlimefunAdapterClient implements ClientModInitializer {
         ShowComponents.registerCommands();
 
         BackPackHelper.register();
-        ModelPredicateProviderRegistry.register(Identifier.of("sf_predict", "sf_item"), new SFPredicateProvider());
+        ModelPredicateProviderRegistry.register(Identifier.of("sf_predict", "sf_item"), new SlimefunPredicateProvider());
         SlimefunScreenHandlerType.register();
     }
 }
