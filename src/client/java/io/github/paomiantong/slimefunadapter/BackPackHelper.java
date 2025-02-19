@@ -37,13 +37,13 @@ import java.util.regex.Pattern;
 import static io.github.paomiantong.slimefunadapter.config.Config.CONFIG_PATH;
 import static io.github.paomiantong.slimefunadapter.config.Config.writeStringToFile;
 
-@Slf4j(topic = "SlimefunPredicate")
+@Slf4j(topic = "SlimefunAdapter")
 public class BackPackHelper {
     private static final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.slimefun_predicate.backpack", // The translation key of the keybinding's name
+            "key.slimefunadapter.backpack", // The translation key of the keybinding's name
             InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
             GLFW.GLFW_KEY_B, // The keycode of the key
-            "category.slimefun_predicate.backpack" // The translation key of the keybinding's category.
+            "category.slimefunadapter.backpack" // The translation key of the keybinding's category.
     ));
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Pattern pattern = Pattern.compile(".* \\[大小 \\d+\\]");

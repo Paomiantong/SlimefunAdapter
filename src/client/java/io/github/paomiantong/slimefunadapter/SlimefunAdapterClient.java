@@ -15,7 +15,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class SlimefunAdapterClient implements ClientModInitializer {
     public static final KeyBinding tooltipKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.slimefun_predicate.tooltip",
+            "key.slimefunadapter.tooltip",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_LEFT_ALT,
             KeyBinding.INVENTORY_CATEGORY

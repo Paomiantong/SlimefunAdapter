@@ -36,7 +36,7 @@ public class EmiIntegrate implements EmiPlugin {
             PlayerEntity player = MinecraftClient.getInstance().player;
             if (player != null) {
                 player.sendMessage(Text
-                        .translatable("message.slimefun_predicate.slimefun_data_not_loaded")
+                        .translatable("message.slimefunadapter.slimefun_data_not_loaded")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD)
                 );
             } else {

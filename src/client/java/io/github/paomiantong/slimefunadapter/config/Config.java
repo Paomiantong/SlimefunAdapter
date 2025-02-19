@@ -19,11 +19,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j(topic = "SlimefunPredicate")
+@Slf4j(topic = "SlimefunAdapter")
 public final class Config {
     private static final Map<String, Double> item_models = new HashMap<>();
-    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("slimefun-predicate");
-    private static final Path MODEL_DATA_PATH = Paths.get("config/slimefun-predicate/item-models-remap.yml");
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("slimefun-adapter");
+    private static final Path MODEL_DATA_PATH = Paths.get("config/slimefun-adapter/item-models-remap.yml");
     private static final String DEFAULT_MODEL_DATA_PATH = "/remap.yml";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -162,7 +162,7 @@ public final class Config {
     }
 
     public static File getConfigFile() {
-        final File configFile = FabricLoader.getInstance().getConfigDir().resolve("slimefun_predicate.json").toFile();
+        final File configFile = FabricLoader.getInstance().getConfigDir().resolve("slimefunadapter.json").toFile();
         if (!configFile.exists()) {
             try {
                 configFile.getParentFile().mkdirs();

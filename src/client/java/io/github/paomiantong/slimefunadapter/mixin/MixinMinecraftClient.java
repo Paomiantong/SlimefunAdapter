@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
-@Slf4j(topic = "SlimefunPredicate")
+@Slf4j(topic = "SlimefunAdapter")
 public class MixinMinecraftClient {
 
     @Inject(at = @At("HEAD"), method = "onDisconnected")

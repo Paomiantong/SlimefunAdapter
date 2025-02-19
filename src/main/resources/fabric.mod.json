@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "slimefun_adapter",
+  "id": "slimefunadapter",
   "version": "${version}",
-  "name": "slimefun_adapter",
+  "name": "SlimefunAdapter",
   "description": "ClientSide Enhancement mod for Slimefun4",
   "authors": [
     "Exbuekct_"
@@ -27,7 +27,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "1.21",
+    "minecraft": "1.21.*",
     "fabric-key-binding-api-v1": "*"
   }
 }
