@@ -1,6 +1,5 @@
 package io.github.paomiantong.slimefunadapter.slimefun.menuloader.addons;
 
-import io.github.paomiantong.slimefunadapter.SlimefunAdapterClient;
 import io.github.paomiantong.slimefunadapter.config.Config;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunItemStack;
 import io.github.paomiantong.slimefunadapter.slimefun.SlimefunManager;
@@ -11,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Stack;
 import java.util.function.Predicate;
@@ -22,14 +19,13 @@ import static io.github.paomiantong.slimefunadapter.utils.InventoryUtils.clickSl
 import static io.github.paomiantong.slimefunadapter.utils.SlimefunUtils.getSlimefunID;
 
 
-@Slf4j
+@Slf4j(topic = "SlimefunAdapter")
 public class WorkstationRecipeAddons implements Addons {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SlimefunAdapterClient.class);
     private static Stack<Action> actionStack;
     private static boolean needPageTurning;
     private static String lastState;
     private final static Predicate<ScreenHandler> AWAIT = handler -> {
-        LOGGER.info("lastState: {}, cur: {}", lastState, getPage(handler));
+        log.info("lastState: {}, cur: {}", lastState, getPage(handler));
         return lastState != null && lastState.equals(getPage(handler));
     };
     private final static Pattern pattern = Pattern.compile("\\((\\d+) / (\\d+)\\)");
@@ -41,7 +37,7 @@ public class WorkstationRecipeAddons implements Addons {
                 .getStack()
                 .get(DataComponentTypes.LORE);
         if (lore == null) {
-            LOGGER.error("lore is null");
+            log.error("lore is null");
             return "";
         }
         return lore.lines().get(1).getString();

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -23,8 +24,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.BufferedReader;
@@ -96,6 +99,17 @@ public class BackPackHelper {
                     swapItemToMainHandAndUse(client.player);
                 }
             }
+        });
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (player != null && hand == Hand.MAIN_HAND) {
+                ItemStack stack = player.getMainHandStack();
+                if (SlimefunUtils.getSlimefunID(stack).endsWith("BACKPACK")) {
+                    BACKPACK_OPENED = true;
+                    CURRENT_UUID = SlimefunUtils.getInventoryUUID(stack);
+                }
+
+            }
+            return TypedActionResult.pass(ItemStack.EMPTY);
         });
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (!BACKPACK_OPENED) return;
