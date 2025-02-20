@@ -21,7 +21,7 @@ import java.util.Set;
 import static io.github.paomiantong.slimefunadapter.config.Config.CONFIG_PATH;
 import static io.github.paomiantong.slimefunadapter.config.Config.writeStringToFile;
 
-@Slf4j(topic = "SlimefunPredicate")
+@Slf4j(topic = "SlimefunAdapter")
 public class SlimefunManager {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final @Getter Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
@@ -137,9 +137,7 @@ public class SlimefunManager {
             var type = category.type();
             if (!type.isVanilla() && slimefunItems.containsKey(type.getId())) {
                 final var finalType = slimefunItems.get(type.getId());
-                category.recipes().forEach(recipe -> {
-                    recipe.setType(finalType);
-                });
+                category.recipes().forEach(recipe -> recipe.setType(finalType));
                 entry.setValue(new SlimefunRecipeCategory(finalType, category.recipes()));
             }
         });

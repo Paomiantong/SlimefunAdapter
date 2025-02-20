@@ -1,4 +1,4 @@
-package io.github.paomiantong.slimefunadapter;
+package io.github.paomiantong.slimefunadapter.slimefun;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -23,8 +25,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.BufferedReader;
@@ -37,13 +41,13 @@ import java.util.regex.Pattern;
 import static io.github.paomiantong.slimefunadapter.config.Config.CONFIG_PATH;
 import static io.github.paomiantong.slimefunadapter.config.Config.writeStringToFile;
 
-@Slf4j(topic = "SlimefunPredicate")
+@Slf4j(topic = "SlimefunAdapter")
 public class BackPackHelper {
     private static final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.slimefun_predicate.backpack", // The translation key of the keybinding's name
+            "key.slimefunadapter.backpack", // The translation key of the keybinding's name
             InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
             GLFW.GLFW_KEY_B, // The keycode of the key
-            "category.slimefun_predicate.backpack" // The translation key of the keybinding's category.
+            "category.slimefunadapter" // The translation key of the keybinding's category.
     ));
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Pattern pattern = Pattern.compile(".* \\[大小 \\d+\\]");
@@ -97,10 +101,30 @@ public class BackPackHelper {
                 }
             }
         });
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (player != null) {
+                ItemStack stack = hand == Hand.MAIN_HAND ? player.getMainHandStack() : player.getOffHandStack();
+                if (SlimefunUtils.getSlimefunID(stack).endsWith("BACKPACK")) {
+                    BACKPACK_OPENED = true;
+                    CURRENT_UUID = SlimefunUtils.getInventoryUUID(stack);
+                }
+
+            }
+            return TypedActionResult.pass(ItemStack.EMPTY);
+        });
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (player != null) {
+                ItemStack stack = hand == Hand.MAIN_HAND ? player.getMainHandStack() : player.getOffHandStack();
+                if (SlimefunUtils.getSlimefunID(stack).endsWith("BACKPACK")) {
+                    BACKPACK_OPENED = true;
+                    CURRENT_UUID = SlimefunUtils.getInventoryUUID(stack);
+                }
+            }
+            return ActionResult.PASS;
+        });
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (!BACKPACK_OPENED) return;
             String screenName = screen.getTitle().getString();
-            System.out.println(screenName);
             if (pattern.matcher(screenName).find()) {
                 log.info("Backpack opened: {} {}", screenName, CURRENT_UUID);
                 HandledScreen<?> handledScreen = (HandledScreen<?>) screen;

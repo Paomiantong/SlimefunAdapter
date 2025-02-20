@@ -1,7 +1,7 @@
 package io.github.paomiantong.slimefunadapter.mixin;
 
 
-import io.github.paomiantong.slimefunadapter.BackPackHelper;
+import io.github.paomiantong.slimefunadapter.slimefun.BackPackHelper;
 import io.github.paomiantong.slimefunadapter.render.InventoryRender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

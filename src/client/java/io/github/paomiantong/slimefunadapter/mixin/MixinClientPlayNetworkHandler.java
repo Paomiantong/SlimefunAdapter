@@ -1,7 +1,7 @@
 package io.github.paomiantong.slimefunadapter.mixin;
 
 
-import io.github.paomiantong.slimefunadapter.BackPackHelper;
+import io.github.paomiantong.slimefunadapter.slimefun.BackPackHelper;
 import io.github.paomiantong.slimefunadapter.slimefun.screen.SlimefunScreenHandlerType;
 import io.github.paomiantong.slimefunadapter.utils.CompatUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,13 +15,15 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.listener.TickablePacketListener;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
+import net.minecraft.screen.GenericContainerScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayNetworkHandler.class)
-@Slf4j(topic = "SlimefunPredicate")
+@Slf4j(topic = "SlimefunAdapter")
 public abstract class MixinClientPlayNetworkHandler extends ClientCommonNetworkHandler implements ClientPlayPacketListener, TickablePacketListener {
     protected MixinClientPlayNetworkHandler(MinecraftClient client, ClientConnection connection, ClientConnectionState connectionState) {
         super(client, connection, connectionState);
@@ -31,10 +33,13 @@ public abstract class MixinClientPlayNetworkHandler extends ClientCommonNetworkH
     private void onOpenScreen(OpenScreenS2CPacket packet, CallbackInfo ci) {
         if (!CompatUtils.isEmiLoaded()) return;
         String name = packet.getName().getString();
-        if (SlimefunScreenHandlerType.REGISTRY.containsKey(name)) {
-            HandledScreens.open(SlimefunScreenHandlerType.REGISTRY.get(name), this.client, packet.getSyncId(), packet.getName());
-            System.out.println("open");
-            ci.cancel();
+        int rows = SlimefunScreenHandlerType.getRows(packet.getScreenHandlerType());
+        if (rows > 0) {
+            name += rows;
+            if (SlimefunScreenHandlerType.REGISTRY.containsKey(name)) {
+                HandledScreens.open(SlimefunScreenHandlerType.REGISTRY.get(name), this.client, packet.getSyncId(), packet.getName());
+                ci.cancel();
+            }
         }
     }
 

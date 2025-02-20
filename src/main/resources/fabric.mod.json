@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "slimefun_adapter",
+  "id": "slimefunadapter",
   "version": "${version}",
-  "name": "slimefun_adapter",
+  "name": "SlimefunAdapter",
   "description": "ClientSide Enhancement mod for Slimefun4",
   "authors": [
     "Exbuekct_"
@@ -15,10 +15,10 @@
       "io.github.paomiantong.slimefunadapter.SlimefunAdapterClient"
     ],
     "modmenu": [
-      "io.github.paomiantong.slimefunadapter.config.ModMenuIntegration"
+      "io.github.paomiantong.slimefunadapter.compat.ModMenuIntegration"
     ],
     "emi": [
-      "io.github.paomiantong.slimefunadapter.emi.EmiIntegrate"
+      "io.github.paomiantong.slimefunadapter.compat.EmiIntegrate"
     ]
   },
   "mixins": [

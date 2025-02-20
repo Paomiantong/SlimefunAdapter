@@ -1,8 +1,9 @@
-package io.github.paomiantong.slimefunadapter.config;
+package io.github.paomiantong.slimefunadapter.compat;
 
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
+import io.github.paomiantong.slimefunadapter.config.ConfigScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -1,10 +1,11 @@
-package io.github.paomiantong.slimefunadapter.emi;
+package io.github.paomiantong.slimefunadapter.compat;
 
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
 import io.github.paomiantong.slimefunadapter.SlimefunAdapterClient;
+import io.github.paomiantong.slimefunadapter.emi.SlimefunEmiCategory;
 import io.github.paomiantong.slimefunadapter.emi.handler.AlchimiaVitaeHandler;
 import io.github.paomiantong.slimefunadapter.emi.handler.AutoAncientAltarHandler;
 import io.github.paomiantong.slimefunadapter.emi.handler.GeneralHandler;
@@ -36,7 +37,7 @@ public class EmiIntegrate implements EmiPlugin {
             PlayerEntity player = MinecraftClient.getInstance().player;
             if (player != null) {
                 player.sendMessage(Text
-                        .translatable("message.slimefun_predicate.slimefun_data_not_loaded")
+                        .translatable("message.slimefunadapter.slimefun_data_not_loaded")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD)
                 );
             } else {
@@ -49,10 +50,8 @@ public class EmiIntegrate implements EmiPlugin {
         }
         for (SlimefunRecipeCategory slimefunRecipeCategory : SlimefunManager.getSlimefunRecipeCategories().values()) {
             final SlimefunItemStack type = slimefunRecipeCategory.type();
-            final String workstationId = String.valueOf(type.hashCode());
-            final Identifier categoryIdentifier = Identifier.of("slimefun", workstationId.toLowerCase(Locale.ROOT));
             final EmiStack workStation = EmiStack.of(type.getStack());
-            final SlimefunEmiCategory slimefunEmiCategory = new SlimefunEmiCategory(categoryIdentifier, workStation);
+            final SlimefunEmiCategory slimefunEmiCategory = new SlimefunEmiCategory(workStation);
             registry.addCategory(slimefunEmiCategory);
             registry.addWorkstation(slimefunEmiCategory, workStation);
             for (SlimefunRecipe slimefunRecipe : slimefunRecipeCategory.recipes()) {
