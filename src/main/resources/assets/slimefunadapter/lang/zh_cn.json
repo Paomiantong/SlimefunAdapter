@@ -9,11 +9,11 @@
   "key.slimefunadapter.backpack": "打开背包",
   "config.slimefunadapter.title": "粘液科技适配器",
   "config.slimefunadapter.emi": "EMI",
-  "config.slimefunadapter.emi.support_recipe_category": "支持的配方类别",
-  "config.slimefunadapter.sync.ticks_per_action": "同步频率（刻/操作）",
-  "config.slimefunadapter.sync.exclude": "排除同步的物品",
-  "config.slimefunadapter.sync.special": "特殊同步的物品",
-  "config.slimefunadapter.sync.exclude_workstation": "排除同步的工作台",
+  "config.slimefunadapter.emi.support_recipe_category": "支持emi快速合成的分类(粘液ID)",
+  "config.slimefunadapter.sync.ticks_per_action": "同步频率(tick/次)",
+  "config.slimefunadapter.sync.exclude": "排除同步的物品/分类(名称)",
+  "config.slimefunadapter.sync.special": "特殊同步的物品(粘液ID)",
+  "config.slimefunadapter.sync.exclude_workstation": "排除同步的工作台(粘液ID)",
   "config.slimefunadapter.sync.menu_title": "粘液科技菜单标题",
   "config.slimefunadapter.sync": "菜单同步"
 }
