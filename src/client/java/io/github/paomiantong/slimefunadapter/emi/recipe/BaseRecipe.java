@@ -28,15 +28,7 @@ public class BaseRecipe implements EmiRecipe {
     private final boolean supportRecipe;
 
     public BaseRecipe(SlimefunRecipe recipe, SlimefunEmiCategory category) {
-        String path = "/";
-        if (recipe.getOutput().isVanilla()) {
-            path += recipe.getOutput().getId().replace("minecraft:", "").toLowerCase(Locale.ROOT);
-        } else {
-
-            path += recipe.getOutput().getId().toLowerCase(Locale.ROOT);
-        }
-        path += "_" + recipe.hashCode() + "_" + category.getId().getPath();
-        this.id = Identifier.of("slimefun", path);
+        this.id = generateRecipeId(recipe, category);
         this.input = Arrays.stream(recipe.getInputs()).map(stack ->
                 (EmiIngredient) EmiStack.of(stack.getStack())
         ).toList();
@@ -99,7 +91,21 @@ public class BaseRecipe implements EmiRecipe {
         // Adds an output slot on the right
         // Note that output slots need to call `recipeContext` to inform EMI about their recipe context
         // This includes being able to resolve recipe trees, favorite stacks with recipe context, and more
-        widgets.addSlot(output.get(0), 72 + 14, 18).recipeContext(this);
+        widgets.addSlot(output.getFirst(), 72 + 14, 18).recipeContext(this);
+    }
+
+    private Identifier generateRecipeId(SlimefunRecipe recipe, SlimefunEmiCategory category) {
+        String itemId = recipe.getOutput().isVanilla()
+                ? recipe.getOutput().getId().replace("minecraft:", "")
+                : recipe.getOutput().getId();
+
+        String path = String.format("/%s/%s_%s",
+                recipe.getType().getId().replace("minecraft:", "").toLowerCase(Locale.ROOT),      // 配方类型
+                itemId.toLowerCase(Locale.ROOT),                        // 输出物品ID
+                Integer.toHexString(recipe.hashCode()).substring(0, 4)  // 短哈希值用于区分
+        );
+
+        return Identifier.of("slimefun", path);
     }
 
 }

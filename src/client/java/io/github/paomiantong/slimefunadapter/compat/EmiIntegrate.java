@@ -50,10 +50,8 @@ public class EmiIntegrate implements EmiPlugin {
         }
         for (SlimefunRecipeCategory slimefunRecipeCategory : SlimefunManager.getSlimefunRecipeCategories().values()) {
             final SlimefunItemStack type = slimefunRecipeCategory.type();
-            final String workstationId = String.valueOf(type.hashCode());
-            final Identifier categoryIdentifier = Identifier.of("slimefun", workstationId.toLowerCase(Locale.ROOT));
             final EmiStack workStation = EmiStack.of(type.getStack());
-            final SlimefunEmiCategory slimefunEmiCategory = new SlimefunEmiCategory(categoryIdentifier, workStation);
+            final SlimefunEmiCategory slimefunEmiCategory = new SlimefunEmiCategory(workStation);
             registry.addCategory(slimefunEmiCategory);
             registry.addWorkstation(slimefunEmiCategory, workStation);
             for (SlimefunRecipe slimefunRecipe : slimefunRecipeCategory.recipes()) {
