@@ -13,6 +13,7 @@ import net.minecraft.screen.ScreenHandler;
 
 import java.util.Stack;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static io.github.paomiantong.slimefunadapter.utils.InventoryUtils.clickSlot;
@@ -71,49 +72,55 @@ public class WorkstationRecipeAddons implements Addons {
         }
         needPageTurning = hasNext(handler);
         lastState = getPage(handler);
-        actionStack.push(NEXT_PAGE);
+        actionStack.push(actionFactory.get());
     }
 
-    private static final Action NEXT_PAGE = new Action(-1) {
-        @Override
-        public boolean await(ScreenHandler handler) {
-            return needPageTurning && AWAIT.test(handler);
-        }
+    private static final Supplier<Action> actionFactory = () ->
+            new Action(-1) {
+                @Override
+                public boolean await(ScreenHandler handler) {
+                    return needPageTurning && AWAIT.test(handler);
+                }
 
-        @Override
-        public void execute(ExecutionContext context) {
-            var handler = context.handler();
-            for (int i = 36; i < 36 + 9; i++) {
-                SlimefunItemStack input = new SlimefunItemStack(handler.getSlot(i).getStack().copy());
-                SlimefunItemStack output = new SlimefunItemStack(handler.getSlot(i + 9).getStack().copy());
-                if (input.isEmpty() || output.isEmpty()) {
-                    break;
+                @Override
+                public void execute(ExecutionContext context) {
+                    var handler = context.handler();
+                    for (int i = 36; i < 36 + 9; i++) {
+                        SlimefunItemStack input = new SlimefunItemStack(handler.getSlot(i).getStack().copy());
+                        SlimefunItemStack output = new SlimefunItemStack(handler.getSlot(i + 9).getStack().copy());
+                        if (input.isEmpty() || output.isEmpty()) {
+                            break;
+                        }
+                        SlimefunRecipe recipe = new SlimefunRecipe(output,
+                                new SlimefunItemStack[]{
+                                        input, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
+                                        SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
+                                        SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
+                                },
+                                type);
+                        // 此处为了方便代码编写，就不考虑解锁情况了
+                        if (!output.isVanilla() && !SlimefunManager.hasSlimefunItem(output.getId())) {
+                            SlimefunManager.addSlimefunItem(output);
+                        }
+                        if (!input.isVanilla() && !SlimefunManager.hasSlimefunItem(input.getId())) {
+                            SlimefunManager.addSlimefunItem(input);
+                        }
+                        SlimefunManager.addSlimefunRecipe(recipe);
+                        log.info("Add recipe: {}", recipe);
+                    }
+                    needPageTurning = hasNext(handler);
+                    lastState = getPage(handler);
+                    if (needPageTurning) {
+                        var pageInfo = getPageInfo(lastState);
+                        needPageTurning = pageInfo[0] + 1 < pageInfo[1];
+                        clickSlot(handler, 34);
+                        actionStack.push(actionFactory.get());
+                    }
                 }
-                SlimefunRecipe recipe = new SlimefunRecipe(output,
-                        new SlimefunItemStack[]{
-                                input, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
-                                SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
-                                SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY, SlimefunItemStack.EMPTY,
-                        },
-                        type);
-                // 此处为了方便代码编写，就不考虑解锁情况了
-                if (!output.isVanilla() && !SlimefunManager.hasSlimefunItem(output.getId())) {
-                    SlimefunManager.addSlimefunItem(output);
+
+                @Override
+                public String toString() {
+                    return "NEXT_PAGE" + (needPageTurning ? "" : "(end)");
                 }
-                if (!input.isVanilla() && !SlimefunManager.hasSlimefunItem(input.getId())) {
-                    SlimefunManager.addSlimefunItem(input);
-                }
-                SlimefunManager.addSlimefunRecipe(recipe);
-                log.info("Add recipe: {}", recipe);
-            }
-            needPageTurning = hasNext(handler);
-            lastState = getPage(handler);
-            if (needPageTurning) {
-                var pageInfo = getPageInfo(lastState);
-                needPageTurning = pageInfo[0] + 1 < pageInfo[1];
-                clickSlot(handler, 34);
-                actionStack.push(NEXT_PAGE);
-            }
-        }
-    };
+            };
 }

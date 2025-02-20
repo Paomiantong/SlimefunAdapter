@@ -1,5 +1,8 @@
 {
   "text.slimefunadapter.tooltip": "粘液ID",
+  "gui.slimefunadapter.sync_button.tooltip": "左键同步新增数据\nShift+左键强制更新所有数据",
+  "gui.slimefunadapter.stop_sync_button.tooltip": "停止同步",
+  "gui.slimefunadapter.syncing": "数据同步中，请不要进行操作...",
   "message.slimefunadapter.slimefun_data_not_loaded": "粘液科技数据未加载",
   "key.slimefunadapter.tooltip": "粘液科技工具提示",
   "category.slimefunadapter.title": "粘液科技适配器",

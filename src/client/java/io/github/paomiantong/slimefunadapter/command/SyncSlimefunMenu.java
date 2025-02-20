@@ -15,41 +15,39 @@ import net.minecraft.util.Hand;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class SyncSlimefunMenu {
-    private static boolean monitorRegistered = false;
-
     public static void registerCommands() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->    registerOpenMenuCommand(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> registerOpenMenuCommand(dispatcher));
     }
 
     private static void registerOpenMenuCommand(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal("sync_menu")
-                .executes(context -> {
-                    FabricClientCommandSource source = context.getSource();
-                    openMenu(source, false, false);
-                    return 1;
-                }).then(literal("stop").executes(context -> {
-                    MenuSynchronizer.stopSync();
-                    context.getSource().sendFeedback(Text.literal("停止同步菜单"));
-                    return 1;
-                }))
-                .then(literal("debug").executes(context -> {
-                    FabricClientCommandSource source = context.getSource();
-                    openMenu(source, true, false);
-                    return 1;
-                })).then(literal("update").executes(context -> {
-                    FabricClientCommandSource source = context.getSource();
-                    openMenu(source, false, true);
-                    return 1;
-                })).then(literal("help").executes(context -> {
-                    FabricClientCommandSource source = context.getSource();
-                    source.sendFeedback(Text.literal("sync_menu [debug|update|stop|help]"));
-                    source.sendFeedback(Text.literal("打开菜单并同步菜单，应该在首次使用时执行"));
-                    source.sendFeedback(Text.literal("help: 显示帮助"));
-                    source.sendFeedback(Text.literal("debug: 调试"));
-                    source.sendFeedback(Text.literal("update: 同步菜单并更新已有的菜单，应该在解锁了新物品后执行"));
-                    source.sendFeedback(Text.literal("stop: 停止同步菜单"));
-                    return 1;
-                }))
+                        .executes(context -> {
+                            FabricClientCommandSource source = context.getSource();
+                            openMenu(source, false, false);
+                            return 1;
+                        }).then(literal("stop").executes(context -> {
+                            MenuSynchronizer.stopSync();
+                            context.getSource().sendFeedback(Text.literal("停止同步菜单"));
+                            return 1;
+                        }))
+                        .then(literal("debug").executes(context -> {
+                            FabricClientCommandSource source = context.getSource();
+                            openMenu(source, true, false);
+                            return 1;
+                        })).then(literal("update").executes(context -> {
+                            FabricClientCommandSource source = context.getSource();
+                            openMenu(source, false, true);
+                            return 1;
+                        })).then(literal("help").executes(context -> {
+                            FabricClientCommandSource source = context.getSource();
+                            source.sendFeedback(Text.literal("sync_menu [debug|update|stop|help]"));
+                            source.sendFeedback(Text.literal("打开菜单并同步菜单，应该在首次使用时执行"));
+                            source.sendFeedback(Text.literal("help: 显示帮助"));
+                            source.sendFeedback(Text.literal("debug: 调试"));
+                            source.sendFeedback(Text.literal("update: 同步菜单并更新已有的菜单，应该在解锁了新物品后执行"));
+                            source.sendFeedback(Text.literal("stop: 停止同步菜单"));
+                            return 1;
+                        }))
 //                .then(literal("scan").then(
 //                                argument("name", StringArgumentType.string()).executes(context -> {
 //                                    FabricClientCommandSource source = context.getSource();
@@ -83,15 +81,10 @@ public class SyncSlimefunMenu {
             source.sendFeedback(Text.literal("打开菜单成功"));
             // 模拟玩家在客户端执行右键操作
             if (client.interactionManager != null) {
-                if (!monitorRegistered) {
-                    MenuSynchronizer.registerListener();
-                    monitorRegistered = true;
-                }
+                MenuSynchronizer.registerListener();
                 if (debug) {
                     MenuSynchronizer.startDebug();
                 } else {
-                    if (!update)
-                        SlimefunManager.clear();
                     MenuSynchronizer.startSync(update);
                 }
                 client.interactionManager.interactItem(client.player, Hand.MAIN_HAND);

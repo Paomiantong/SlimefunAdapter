@@ -125,7 +125,6 @@ public class BackPackHelper {
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (!BACKPACK_OPENED) return;
             String screenName = screen.getTitle().getString();
-            System.out.println(screenName);
             if (pattern.matcher(screenName).find()) {
                 log.info("Backpack opened: {} {}", screenName, CURRENT_UUID);
                 HandledScreen<?> handledScreen = (HandledScreen<?>) screen;

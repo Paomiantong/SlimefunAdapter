@@ -1,5 +1,7 @@
 package io.github.paomiantong.slimefunadapter.slimefun.screen;
 
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,6 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface HandlerType {
     String title();
-
     int rows();
 }

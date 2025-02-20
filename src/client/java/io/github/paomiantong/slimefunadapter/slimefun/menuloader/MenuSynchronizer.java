@@ -1,6 +1,7 @@
 package io.github.paomiantong.slimefunadapter.slimefun.menuloader;
 
 import io.github.paomiantong.slimefunadapter.config.Config;
+import io.github.paomiantong.slimefunadapter.slimefun.SlimefunManager;
 import io.github.paomiantong.slimefunadapter.slimefun.menuloader.actions.Action;
 import io.github.paomiantong.slimefunadapter.slimefun.menuloader.actions.Debug;
 import io.github.paomiantong.slimefunadapter.slimefun.menuloader.actions.ExecutionContext;
@@ -23,6 +24,8 @@ import java.util.function.Predicate;
 public class MenuSynchronizer {
     @Getter
     private static boolean running = false;
+    private static boolean registered = false;
+
     private static final Stack<Action> actionStack = new Stack<>();
     private static int lastSyncId = -1;
     private static int tickCounter = 0;
@@ -33,7 +36,9 @@ public class MenuSynchronizer {
     public static final Predicate<ScreenHandler> defaultAwaitPredicate = handler -> handler.syncId == lastSyncId;
 
     public static void registerListener() {
+        if (registered) return;
         ClientTickEvents.END_CLIENT_TICK.register(MenuSynchronizer::onClientTick);
+        registered = true;
     }
 
     public static void startSync(boolean incrementalUpdate_) {
@@ -44,6 +49,9 @@ public class MenuSynchronizer {
             lastSyncId = -1;
             running = true;
             incrementalUpdate = incrementalUpdate_;
+            if (!incrementalUpdate) {
+                SlimefunManager.clear();
+            }
         }
     }
 

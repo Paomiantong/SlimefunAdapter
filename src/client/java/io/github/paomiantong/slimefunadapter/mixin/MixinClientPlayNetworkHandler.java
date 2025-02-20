@@ -15,6 +15,8 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.listener.TickablePacketListener;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
+import net.minecraft.screen.GenericContainerScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,10 +33,13 @@ public abstract class MixinClientPlayNetworkHandler extends ClientCommonNetworkH
     private void onOpenScreen(OpenScreenS2CPacket packet, CallbackInfo ci) {
         if (!CompatUtils.isEmiLoaded()) return;
         String name = packet.getName().getString();
-        if (SlimefunScreenHandlerType.REGISTRY.containsKey(name)) {
-            HandledScreens.open(SlimefunScreenHandlerType.REGISTRY.get(name), this.client, packet.getSyncId(), packet.getName());
-            System.out.println("open");
-            ci.cancel();
+        int rows = SlimefunScreenHandlerType.getRows(packet.getScreenHandlerType());
+        if (rows > 0) {
+            name += rows;
+            if (SlimefunScreenHandlerType.REGISTRY.containsKey(name)) {
+                HandledScreens.open(SlimefunScreenHandlerType.REGISTRY.get(name), this.client, packet.getSyncId(), packet.getName());
+                ci.cancel();
+            }
         }
     }
 

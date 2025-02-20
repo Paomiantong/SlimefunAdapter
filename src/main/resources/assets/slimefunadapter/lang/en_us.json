@@ -1,5 +1,8 @@
 {
   "text.slimefunadapter.tooltip": "SlimefunID",
+  "gui.slimefunadapter.sync_button.tooltip": "Click to sync new data\nShift+Click to force update all data",
+  "gui.slimefunadapter.stop_sync_button.tooltip": "Stop Sync",
+  "gui.slimefunadapter.syncing": "Syncing...",
   "message.slimefunadapter.slimefun_data_not_loaded": "Slimefun Data Not Loaded",
   "key.slimefunadapter.tooltip": "Slimefun Tooltip",
   "category.slimefunadapter.title": "Slimefun Adapter",
