@@ -7,24 +7,23 @@ import io.github.paomiantong.slimefunadapter.utils.ConfigUtils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.fabricmc.loader.api.FabricLoader;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j(topic = "SlimefunAdapter")
 public final class Config {
-    private static final Map<String, Double> item_models = new HashMap<>();
     public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("slimefun-adapter");
-    private static final Path MODEL_DATA_PATH = Paths.get("config/slimefun-adapter/item-models-remap.yml");
-    private static final String DEFAULT_MODEL_DATA_PATH = "/remap.yml";
+    public static final Path MODEL_DATA_PATH = Paths.get("config/slimefun-adapter/item-models.yml");
+    public static final String DEFAULT_MODEL_DATA_PATH = "/item-models.yml";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Configurable
@@ -83,33 +82,6 @@ public final class Config {
 //    public static HashSet<String> SERIES_WORKSTATION = new HashSet<>(List.of(
 //            "FREEZER"
 //    ));
-
-
-    public static float getModel(String sf_id) {
-        return item_models.getOrDefault(sf_id, 0.).floatValue();
-    }
-
-    public static void loadModel() {
-        Yaml yaml = new Yaml();
-        InputStream inputStream;
-
-
-        if (Files.exists(MODEL_DATA_PATH)) {
-            log.info("Loading configuration from {}", MODEL_DATA_PATH);
-            try {
-                inputStream = new FileInputStream(MODEL_DATA_PATH.toFile());
-            } catch (FileNotFoundException e) {
-                log.error("Failed to load model: {}", e.getMessage());
-                return;
-            }
-        } else {
-            // 从resources加载默认配置
-            log.info("Loading default configuration from resources");
-            inputStream = Config.class.getResourceAsStream(DEFAULT_MODEL_DATA_PATH);
-        }
-        item_models.putAll(yaml.load(inputStream));
-        log.info("Loaded {} item models", item_models.size());
-    }
 
     public static void loadConfig() {
         File configFile = getConfigFile();

@@ -1,7 +1,5 @@
 package io.github.paomiantong.slimefunadapter.slimefun.screen;
 
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
