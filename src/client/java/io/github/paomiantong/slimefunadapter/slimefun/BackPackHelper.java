@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -101,8 +102,8 @@ public class BackPackHelper {
             }
         });
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (player != null && hand == Hand.MAIN_HAND) {
-                ItemStack stack = player.getMainHandStack();
+            if (player != null) {
+                ItemStack stack = hand == Hand.MAIN_HAND ? player.getMainHandStack() : player.getOffHandStack();
                 if (SlimefunUtils.getSlimefunID(stack).endsWith("BACKPACK")) {
                     BACKPACK_OPENED = true;
                     CURRENT_UUID = SlimefunUtils.getInventoryUUID(stack);
@@ -110,6 +111,16 @@ public class BackPackHelper {
 
             }
             return TypedActionResult.pass(ItemStack.EMPTY);
+        });
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (player != null) {
+                ItemStack stack = hand == Hand.MAIN_HAND ? player.getMainHandStack() : player.getOffHandStack();
+                if (SlimefunUtils.getSlimefunID(stack).endsWith("BACKPACK")) {
+                    BACKPACK_OPENED = true;
+                    CURRENT_UUID = SlimefunUtils.getInventoryUUID(stack);
+                }
+            }
+            return ActionResult.PASS;
         });
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
             if (!BACKPACK_OPENED) return;
